@@ -1,0 +1,16 @@
+{
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "tailwindStylesheet": "./src/index.css",
+  "tailwindAttributes": ["myClassList"],
+  "tailwindFunctions": ["cn", "clsx"],
+  "singleQuote": false,
+  "printWidth": 100,
+  "tabWidth": 2,
+  "useTabs": false,
+  "bracketSameLine": false,
+  "trailingComma": "all",
+  "semi": true,
+  "singleAttributePerLine": true,
+  "endOfLine": "auto"
+}
+
