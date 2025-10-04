@@ -1,22 +1,21 @@
 import { useEffect, useState } from "react";
+import { THEME_STORAGE_KEY } from "@/shared/constants";
 import { ThemeContext } from "@shared/contexts";
-
-type Theme = "dark" | "light" | "system";
+import { localStorageRead, localStorageWrite } from "@/shared/lib";
+import type { Theme } from ".";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
   defaultTheme?: Theme;
-  storageKey?: string;
 };
 
 export const ThemeProvider = ({
   children,
   defaultTheme = "system",
-  storageKey = "theme",
   ...props
 }: ThemeProviderProps) => {
   const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme,
+    () => localStorageRead(THEME_STORAGE_KEY) ?? defaultTheme,
   );
 
   useEffect(() => {
@@ -40,7 +39,7 @@ export const ThemeProvider = ({
   const value = {
     theme,
     setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme);
+      localStorageWrite(THEME_STORAGE_KEY, theme);
       setTheme(theme);
     },
   };

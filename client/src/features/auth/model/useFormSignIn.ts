@@ -1,35 +1,54 @@
+import { toast } from "sonner";
 import { revalidateLogic, useForm } from "@tanstack/react-form";
-import { signInUserSchema } from "./shemas";
 import { useMutation } from "@tanstack/react-query";
-import type { LoginUserDto } from "@/shared/api/generated";
+import { useNavigate } from "@tanstack/react-router";
+import { signInUserSchema } from "./shemas";
+import { useAuth } from "@/shared/contexts/auth";
+import { authControllerSignInMutation } from "@/shared/api/generated/@tanstack/react-query.gen";
+import type { AuthUser, LoginUserDto } from "@/shared/api/generated";
 
 const defaultSignInUser: LoginUserDto = { email: "", password: "" };
 
 export function useFormSignIn() {
-  // const mutation = useMutation({
-  //   mutationFn: (newTodo) => {
-  //     return axios.post('/todos', newTodo)
-  //   },
-  // })
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSuccess = (data: AuthUser) => {
+    const { accessToken, username } = data;
+    login(accessToken);
+
+    navigate({
+      to: "/app",
+    });
+
+    toast.success(`Добро пожаловать ${username}!`);
+  };
+
+  const handleError = (error: Error) => {
+    toast.error(error.message);
+  };
+
+  const authSignInMutation = useMutation({
+    ...authControllerSignInMutation(),
+    onError: handleError,
+    onSuccess: handleSuccess,
+  });
 
   const { Field, handleSubmit, Subscribe } = useForm({
     defaultValues: defaultSignInUser,
     onSubmit: async ({ value }) => {
-      // Handle form submission
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(null);
-        }, 1000);
+      authSignInMutation.mutate({
+        body: {
+          ...value,
+        },
       });
-
-      console.log(value);
     },
     validationLogic: revalidateLogic({
-      mode: "blur",
+      mode: "submit",
       modeAfterSubmission: "change",
     }),
     validators: {
-      onBlur: signInUserSchema,
+      onDynamic: signInUserSchema,
     },
   });
 

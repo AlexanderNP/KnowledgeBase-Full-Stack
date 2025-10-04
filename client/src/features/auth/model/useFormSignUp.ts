@@ -4,26 +4,29 @@ import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { signUpUserSchema } from ".";
 import { useMutation } from "@tanstack/react-query";
 import { authControllerSignUpMutation } from "@/shared/api/generated/@tanstack/react-query.gen";
-import type { CreateUserDto } from "@/shared/api/generated";
+import type { AuthUser, CreateUserDto } from "@/shared/api/generated";
 
 const defaultSignUpUser: CreateUserDto = { email: "", username: "", password: "" };
 
 export function useFormSignUp() {
   const navigate = useNavigate();
 
+  const handleSuccess = (data: Partial<AuthUser>) => {
+    toast.success(`Ваш аккаунт ${data.email} успешно создан!`);
+
+    navigate({
+      to: "/auth/sign-in",
+    });
+  };
+
+  const handleError = (error: Error) => {
+    toast.error(error.message);
+  };
+
   const createUserMutation = useMutation({
     ...authControllerSignUpMutation(),
-    onError: (error) => {
-      console.log(error);
-      toast("Произошла ошибка");
-    },
-    onSuccess: (data) => {
-      console.log(data);
-      toast("Вы успешно зарегистрировались!");
-      navigate({
-        to: "/auth/sign-in",
-      });
-    },
+    onError: handleError,
+    onSuccess: handleSuccess,
   });
 
   const { Field, handleSubmit, Subscribe } = useForm({
@@ -38,11 +41,11 @@ export function useFormSignUp() {
       });
     },
     validationLogic: revalidateLogic({
-      mode: "blur",
+      mode: "submit",
       modeAfterSubmission: "change",
     }),
     validators: {
-      onBlur: signUpUserSchema,
+      onDynamic: signUpUserSchema,
     },
   });
 

@@ -1,5 +1,10 @@
-import { ThemeProvider } from "@/shared/contexts/ThemeProvider";
+import { ThemeProvider } from "@/shared/contexts/theme";
+import { AuthProvider } from "@/shared/contexts/auth";
 
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
-  return <ThemeProvider>{children}</ThemeProvider>;
+  return (
+    <AuthProvider>
+      <ThemeProvider>{children}</ThemeProvider>
+    </AuthProvider>
+  );
 };

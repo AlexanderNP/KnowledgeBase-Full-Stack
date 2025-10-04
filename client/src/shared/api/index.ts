@@ -1,5 +1,7 @@
-import { createClient } from "./generated/client";
+import { client } from "./generated/client.gen";
 
-export const apiClient = createClient({
-  baseUrl: "http://localhost:3000/api",
-});
+export const apiClient = () => {
+  return client.setConfig({
+    baseUrl: "http://localhost:3000/api",
+  });
+};
