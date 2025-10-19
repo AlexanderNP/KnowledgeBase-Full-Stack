@@ -15,8 +15,8 @@ export class AuthController {
 
     response.cookie('refreshToken', signUser.refreshToken, {
       httpOnly: true,
-      sameSite: 'none', // иначе браузер заблокирует
-      secure: false, // локально без https нужно false
+      sameSite: 'lax',
+      secure: false,
       maxAge: 7 * 24 * 3600000,
     });
 
@@ -41,8 +41,8 @@ export class AuthController {
 
     response.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
-      sameSite: 'none', // иначе браузер заблокирует
-      secure: false, // локально без https нужно false
+      sameSite: 'lax',
+      secure: false,
       maxAge: 7 * 24 * 3600000,
     });
 
