@@ -16,7 +16,7 @@ export const UserProvider = ({
 
   const value = {
     user,
-    setUser: (user: User) => {
+    setUser: (user: User | null) => {
       setUser(user);
     },
   };

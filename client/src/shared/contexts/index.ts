@@ -9,7 +9,8 @@ const initialStateTheme: ThemeProviderState = {
 };
 
 const initialStateAuth: AuthProviderState = {
-  isAuth: false,
+  token: null,
+  sessionId: null,
   logout: () => null,
   login: () => null,
 };

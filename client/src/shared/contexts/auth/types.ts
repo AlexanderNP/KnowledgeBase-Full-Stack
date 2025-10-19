@@ -1,5 +1,6 @@
 export type AuthProviderState = {
-  isAuth: boolean;
+  token: string | null;
+  sessionId: string | null;
   logout: () => void;
-  login: (token: string) => void;
+  login: (payload: { token: string; sessionId: string }) => void;
 };

@@ -1,21 +1,32 @@
-import { ThemeSwitcher } from "@/features/theme-switcher/ui";
 import { Button } from "@/components/ui";
+import { UserRound } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { LogIn, UserRoundPlus } from "lucide-react";
+import { useUserContext } from "@/shared/contexts/user";
+import { UserCardAvatar } from "@/entities/user/ui/UserCardAvatar";
+import { ThemeSwitcher } from "@/features/theme-switcher/ui";
+import { LogoutButton } from "@/features/auth/ui/LogoutButton";
 
 export const Header = () => {
+  const { user } = useUserContext();
+
   return (
-    <div className="flex items-center gap-4 px-3.5 py-5">
+    <header className="flex h-28 items-center gap-4 border-b px-3.5 py-5">
       <h1 className="mr-auto text-4xl font-bold transition-transform hover:scale-105">
         <Link to="/app">База знаний</Link>
       </h1>
-      <Button asChild>
-        <Link to="/auth/sign-in">
-          <UserRoundPlus />
-          Войти
-        </Link>
-      </Button>
+      {user ? (
+        <UserCardAvatar user={user}>
+          <LogoutButton />
+        </UserCardAvatar>
+      ) : (
+        <Button asChild>
+          <Link to="/auth/sign-in">
+            <UserRound />
+            Войти
+          </Link>
+        </Button>
+      )}
       <ThemeSwitcher />
-    </div>
+    </header>
   );
 };

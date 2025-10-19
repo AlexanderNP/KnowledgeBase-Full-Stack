@@ -1,36 +1,37 @@
 import { useState } from "react";
 import { localStorageWrite, localStorageRead, localStorageRemove } from "@/shared/lib";
 import { AuthContext } from "..";
-import { IS_AUTH_STORAGE_KEY, ACCESS_TOKEN_STORAGE_KEY } from "@/shared/constants";
+import { SESSION_ID_STORAGE_KEY, ACCESS_TOKEN_STORAGE_KEY } from "@/shared/constants";
 
 type AuthProviderProps = {
   children: React.ReactNode;
-  defaultAuthState?: boolean;
 };
 
-export const AuthProvider = ({
-  children,
-  defaultAuthState = false,
-  ...props
-}: AuthProviderProps) => {
-  const [isAuth, setAuth] = useState<boolean>(
-    () => localStorageRead(IS_AUTH_STORAGE_KEY) ?? defaultAuthState,
+export const AuthProvider = ({ children, ...props }: AuthProviderProps) => {
+  const [sessionId, setSessionId] = useState<string | null>(() =>
+    localStorageRead(SESSION_ID_STORAGE_KEY),
+  );
+  const [token, setToken] = useState<string | null>(() =>
+    localStorageRead(ACCESS_TOKEN_STORAGE_KEY),
   );
 
   const logout = () => {
-    setAuth(false);
-    localStorageWrite(IS_AUTH_STORAGE_KEY, false);
+    setSessionId(null);
+    setToken(null);
+    localStorageRemove(SESSION_ID_STORAGE_KEY);
     localStorageRemove(ACCESS_TOKEN_STORAGE_KEY);
   };
 
-  const login = (token: string) => {
-    localStorageWrite(ACCESS_TOKEN_STORAGE_KEY, token);
-    localStorageWrite(IS_AUTH_STORAGE_KEY, true);
-    setAuth(true);
+  const login = (payload: { token: string; sessionId: string }) => {
+    setSessionId(payload.sessionId);
+    setToken(payload.token);
+    localStorageWrite(ACCESS_TOKEN_STORAGE_KEY, payload.token);
+    localStorageWrite(SESSION_ID_STORAGE_KEY, payload.sessionId);
   };
 
   const value = {
-    isAuth,
+    token,
+    sessionId,
     logout,
     login,
   };

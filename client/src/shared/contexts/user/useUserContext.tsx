@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { AuthContext } from "@shared/contexts";
+import { UserContext } from "@shared/contexts";
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
+export const useUserContext = () => {
+  const context = useContext(UserContext);
 
   if (context === undefined) throw new Error("useTheme must be used within a ThemeProvider");
 

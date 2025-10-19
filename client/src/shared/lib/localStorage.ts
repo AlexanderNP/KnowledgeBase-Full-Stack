@@ -21,3 +21,7 @@ export const localStorageWrite = <T>(key: string, value: T): void => {
 export const localStorageRemove = (key: string): void => {
   localStorage.removeItem(key);
 };
+
+export const localStorageClear = (): void => {
+  localStorage.clear();
+};
