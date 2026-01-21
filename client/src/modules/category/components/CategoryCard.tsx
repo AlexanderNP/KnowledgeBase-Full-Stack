@@ -7,7 +7,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui";
+} from "@/components/ui/card";
 import { ArrowUpRight } from "lucide-react";
 import type { Category } from "@/shared/api/generated";
 

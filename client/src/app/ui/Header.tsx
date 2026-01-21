@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui";
+import { Button } from "@/components/ui/button";
 import { UserRound } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useUserContext } from "@/shared/contexts/user";
-import { UserCardAvatar } from "@/entities/user/ui/UserCardAvatar";
+import { UserCardAvatar } from "@/modules/user";
 import { ThemeSwitcher } from "@/features/theme-switcher/ui";
-import { LogoutButton } from "@/features/auth/ui/LogoutButton";
+import { LogoutButton } from "@/modules/auth";
 
 export const Header = () => {
   const { user } = useUserContext();

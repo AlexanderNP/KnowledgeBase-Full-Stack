@@ -1,5 +1,5 @@
-import { CategoryCard } from "@/entities/category-card/ui/CategoryCard";
-import { CategoryListSkeleton } from "@/features/category-list/ui/CategoryListSkeleton";
+import { CategoryCard } from "@/modules/category/components/CategoryCard";
+import { CategoryListSkeleton } from "@/modules/category/components/CategoryListSkeleton";
 import { categoriesControllerGetCategoriesOptions } from "@/shared/api/generated/@tanstack/react-query.gen";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
@@ -11,6 +11,7 @@ export function CategoryList() {
     isPending,
   } = useQuery({
     ...categoriesControllerGetCategoriesOptions(),
+    staleTime: Infinity,
   });
 
   if (isPending) {

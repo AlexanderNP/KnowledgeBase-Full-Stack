@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui";
-import { useLogout } from "../model/useLogout";
+import { Button } from "@/components/ui/button";
+import { useLogout } from "@/modules/auth/hooks/useLogout";
 
 export function LogoutButton() {
   const { handleLogout } = useLogout();

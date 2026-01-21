@@ -6,13 +6,15 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-  Button,
-} from "@/components/ui";
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 import { Heart, Eye, MessageCircle } from "lucide-react";
 import type { CategoriesControllerGetCategoryByIdResponse } from "@/shared/api/generated";
 
-export function ArticleCard(article: CategoriesControllerGetCategoryByIdResponse["articles"][0]) {
+export function CategoryArticlesCard(
+  article: CategoriesControllerGetCategoryByIdResponse["articles"][0],
+) {
   return (
     <Card>
       <CardHeader className="gap-5">

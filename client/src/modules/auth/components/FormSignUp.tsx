@@ -1,11 +1,12 @@
-import { Button, Label, Input } from "@/components/ui";
+import { Button } from "@/components/ui/button";
+import { Label } from "@radix-ui/react-label";
+import { Input } from "@/components/ui/input";
 import { Loader } from "lucide-react";
-import { Link } from "@tanstack/react-router";
-import { FormErrorField } from "@/features/auth/ui/FormErrorField";
-import { useFormSignIn } from "@/features/auth/model";
+import { useFormSignUp } from "@/modules/auth/hooks/useFormSignUp";
+import { FormErrorField } from "@/modules/auth/components/FormErrorField";
 
-export function FormSignIn() {
-  const { Field, Subscribe, handleSubmit } = useFormSignIn();
+export function FormSignUp() {
+  const { Field, Subscribe, handleSubmit } = useFormSignUp();
 
   return (
     <>
@@ -16,20 +17,26 @@ export function FormSignIn() {
         }}
         className="flex flex-col items-center gap-5"
       >
-        <h1>Вход</h1>
-        <div className="flex items-center gap-1 text-sm">
-          <span>Нет аккаунта?</span>
-          <Link
-            to="/auth/sign-up"
-            className="underline underline-offset-4"
-          >
-            Зарегистрируйтесь
-          </Link>
-        </div>
-
+        <h1>Регистрация</h1>
+        <Field
+          name="username"
+          children={({ state, handleBlur, handleChange }) => (
+            <div className="flex w-full flex-col gap-2.5">
+              <Label htmlFor="username">Ваше имя</Label>
+              <Input
+                id="username"
+                placeholder="Александр"
+                value={state.value}
+                onBlur={handleBlur}
+                onChange={(e) => handleChange(e.target.value)}
+              />
+              <FormErrorField meta={state.meta} />
+            </div>
+          )}
+        />
         <Field
           name="email"
-          children={({ state, handleChange, handleBlur }) => (
+          children={({ state, handleBlur, handleChange }) => (
             <div className="flex w-full flex-col gap-2.5">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -45,13 +52,12 @@ export function FormSignIn() {
         />
         <Field
           name="password"
-          children={({ state, handleChange, handleBlur }) => (
+          children={({ state, handleBlur, handleChange }) => (
             <div className="flex w-full flex-col gap-2.5">
               <Label htmlFor="password">Пароль</Label>
               <Input
                 id="password"
                 type="password"
-                placeholder="qwerty12345"
                 value={state.value}
                 onBlur={handleBlur}
                 onChange={(e) => handleChange(e.target.value)}
@@ -70,7 +76,7 @@ export function FormSignIn() {
               disabled={!canSubmit || isSubmitting}
             >
               {isSubmitting && <Loader className="animate-spin" />}
-              Вход
+              Зарегистрироваться
             </Button>
           )}
         />

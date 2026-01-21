@@ -1,6 +1,6 @@
-import { Header } from "@/components/Header";
+import { Header } from "@/app/ui/Header";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { useUserProfile } from "@/entities/user/model/useUserProfile";
+import { useUserProfile } from "@/modules/user";
 
 export const Route = createFileRoute("/app")({
   component: Home,

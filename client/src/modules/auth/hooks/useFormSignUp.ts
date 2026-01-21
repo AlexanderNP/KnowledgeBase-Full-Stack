@@ -1,9 +1,9 @@
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { revalidateLogic, useForm } from "@tanstack/react-form";
-import { signUpUserSchema } from ".";
 import { useMutation } from "@tanstack/react-query";
 import { authControllerSignUpMutation } from "@/shared/api/generated/@tanstack/react-query.gen";
+import { signUpUserSchema } from "@/modules/auth/shemas";
 import type { AuthUser, CreateUserDto } from "@/shared/api/generated";
 
 const defaultSignUpUser: CreateUserDto = { email: "", username: "", password: "" };

@@ -2,8 +2,8 @@ import { toast } from "sonner";
 import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { signInUserSchema } from "./shemas";
 import { useAuthContext } from "@/shared/contexts/auth";
+import { signInUserSchema } from "@/modules/auth/shemas";
 import { authControllerSignInMutation } from "@/shared/api/generated/@tanstack/react-query.gen";
 import type { AuthUser, LoginUserDto } from "@/shared/api/generated";
 
