@@ -78,7 +78,7 @@ export class ArticlesController {
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
-    description: 'Загрузить файлы/изображения к статье',
+    description: 'Файл с изображением/документом',
     type: FileUploadDto,
   })
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
