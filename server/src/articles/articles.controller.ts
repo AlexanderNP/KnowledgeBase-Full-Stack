@@ -11,11 +11,12 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ArticlesService } from './articles.service';
-import { CreateArticleDto, UpdateArticleDto } from './dto';
+import { CreateArticleDto, UpdateArticleDto, FileUploadDto } from './dto';
 import { Article } from './articles.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ValidationMongoIdPipe } from 'src/common/pipes/validation.mongoId.pipe';
 import { AuthWithoutRoles } from 'src/auth/decorators';
+import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 
 @Controller('articles')
 export class ArticlesController {
@@ -75,6 +76,11 @@ export class ArticlesController {
   @AuthWithoutRoles()
   @Post('file/upload')
   @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Загрузить файлы/изображения к статье',
+    type: FileUploadDto,
+  })
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
     return this.articlesService.createFile(file);
   }
