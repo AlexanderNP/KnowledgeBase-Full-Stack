@@ -9,9 +9,13 @@ import { articlesControllerUploadFileMutation } from "@/shared/api/generated/@ta
 export const EditorUploadFile = ({
   onSuccess,
   onError,
+  typeFile,
+  children,
 }: {
+  typeFile: "IMG" | "DOCUMENT";
   onError?: (error: Error) => void;
   onSuccess?: (data: string) => void;
+  children?: React.ReactElement;
 }) => {
   const [file, setFile] = useState<File | null>(null);
 
@@ -40,19 +44,21 @@ export const EditorUploadFile = ({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-        >
-          Загрузить изображение
-        </Button>
+        {children ?? (
+          <Button
+            variant="outline"
+            size="sm"
+          >
+            {typeFile === "IMG" ? <>Загрузить изображение</> : <>Загрузить документ</>}
+          </Button>
+        )}
       </PopoverTrigger>
       <PopoverContent
         align="start"
         className="border-none p-0"
       >
         <FilePicker
-          type="IMG"
+          type={typeFile}
           changeFileValue={setFile}
         />
         <div className="flex justify-center p-2">

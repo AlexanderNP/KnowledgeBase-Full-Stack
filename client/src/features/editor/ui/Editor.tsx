@@ -2,6 +2,7 @@ import MDEditor from "@uiw/react-md-editor";
 import { commands } from "@uiw/react-md-editor";
 import { useTheme } from "@/shared/contexts/theme";
 import { EditorImageGroup } from "./EditorImageGroup";
+import { EditorDocument } from "./EditorDocument";
 import type { ICommand, MDEditorProps } from "@uiw/react-md-editor";
 
 const imageGroup: ICommand = {
@@ -35,6 +36,18 @@ const imageGroup: ICommand = {
   children: (props) => <EditorImageGroup {...props} />,
 };
 
+const documentCommand: ICommand = {
+  name: "document",
+  keyCommand: "document",
+  render: (command, disabled, executeCommand) => (
+    <EditorDocument
+      command={command}
+      disabled={disabled}
+      executeCommand={executeCommand}
+    />
+  ),
+};
+
 export const Editor = ({
   value,
   onChange,
@@ -46,7 +59,9 @@ export const Editor = ({
 
   const filterCommands = () => [
     ...commands.getCommands().filter((item) => item.name !== "image"),
-    imageGroup,
+    commands.divider,
+    commands.group([], imageGroup),
+    documentCommand,
   ];
 
   return (
@@ -55,6 +70,7 @@ export const Editor = ({
       value={value}
       onChange={onChange}
       preview="edit"
+      height={500}
       commands={filterCommands()}
     />
   );

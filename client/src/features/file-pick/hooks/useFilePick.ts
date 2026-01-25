@@ -15,12 +15,12 @@ export const useFilePick = (onLoad?: (e: ProgressEvent<FileReader>) => void) => 
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, onChange: (file: File) => void) => {
     if (!e.target.files?.length) return;
 
     const file = e.target.files[0];
-
     setFile(file);
+    onChange(file);
     readFile(file);
   };
 

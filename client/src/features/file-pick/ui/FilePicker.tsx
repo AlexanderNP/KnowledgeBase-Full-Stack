@@ -36,8 +36,7 @@ export const FilePicker = ({ type, changeFileValue }: Props) => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleChangeFilePicker(e);
-    changeFileValue(file);
+    handleChangeFilePicker(e, changeFileValue);
   };
 
   return (

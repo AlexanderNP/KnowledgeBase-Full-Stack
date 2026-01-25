@@ -42,7 +42,10 @@ export const EditorImageGroup = (props: {
         onClick={() => props.close()}
       />
       <div className="flex gap-3.5 align-middle">
-        <EditorUploadFile onSuccess={handleMDPaste} />
+        <EditorUploadFile
+          onSuccess={handleMDPaste}
+          typeFile="IMG"
+        />
         <Button
           variant="outline"
           onClick={() => handleMDPaste()}
