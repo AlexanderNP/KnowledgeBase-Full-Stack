@@ -178,6 +178,10 @@ export type UpdateArticleDto = {
   categoryIds?: Array<string>;
 };
 
+export type FileUploadDto = {
+  file: Blob | File;
+};
+
 export type CreateCommentDto = {
   /**
    * Текст комментария
@@ -473,7 +477,10 @@ export type ArticlesControllerUpdateArticleResponse =
   ArticlesControllerUpdateArticleResponses[keyof ArticlesControllerUpdateArticleResponses];
 
 export type ArticlesControllerUploadFileData = {
-  body?: never;
+  /**
+   * Файл с изображением/документом
+   */
+  body: FileUploadDto;
   path?: never;
   query?: never;
   url: "/articles/file/upload";

@@ -20,7 +20,6 @@ export const apiClient = () => {
   });
 
   client.interceptors.response.use(async (res, req, options) => {
-    console.log(options);
     if (res.status !== 401) return res;
 
     if (options.url.includes("/auth/refresh")) return res;

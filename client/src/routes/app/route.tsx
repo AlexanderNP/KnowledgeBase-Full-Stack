@@ -11,8 +11,8 @@ function Home() {
   return (
     <>
       <Header />
-      <main>
-        <div className="mx-auto max-w-[1366px] py-10">
+      <main className="min-h-[100%]">
+        <div className="mx-auto h-[85vh] max-w-[1366px] py-10">
           <Outlet />
         </div>
       </main>

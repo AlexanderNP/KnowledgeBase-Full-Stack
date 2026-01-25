@@ -1,10 +1,15 @@
 import { CategoryArticlesCard } from "./CategoryArticlesCard";
 import { CategoryArticlesSkeleton } from "./CategoryArticlesSkeleton";
+import { Button } from "@/components/ui/button";
 import { Frown } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
+import { useUserContext } from "@/shared/contexts/user";
 import { categoriesControllerGetCategoryByIdOptions } from "@/shared/api/generated/@tanstack/react-query.gen";
 
 export function CategoryArticles({ categoryId }: { categoryId: string }) {
+  const { user } = useUserContext();
+
   const { data, isPending, isError } = useQuery({
     ...categoriesControllerGetCategoryByIdOptions({
       path: {
@@ -33,7 +38,14 @@ export function CategoryArticles({ categoryId }: { categoryId: string }) {
             <p className="text-2xl font-bold">Категория не содержит статей.</p>
             <Frown size={28} />
           </div>
-          <p className="text-2xl font-bold">Хотите добавить статью?</p>
+          <p className="mb-3.5 text-2xl font-bold">Хотите добавить статью?</p>
+          <Button
+            asChild
+            variant="outline"
+            size="lg"
+          >
+            <Link to={user ? "/app/articles/add" : "/auth/sign-in"}>Добавить</Link>
+          </Button>
         </div>
       </div>
     );

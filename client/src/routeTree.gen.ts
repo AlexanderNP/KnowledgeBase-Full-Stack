@@ -15,8 +15,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
-import { Route as AppCategoriesCategoryIdRouteImport } from './routes/app/categories.$categoryId'
-import { Route as AppArticlesArticleIdRouteImport } from './routes/app/articles.$articleId'
+import { Route as AppCategoriesCategoryIdRouteImport } from './routes/app/categories/$categoryId'
+import { Route as AppArticlesAddRouteImport } from './routes/app/articles/add'
+import { Route as AppArticlesArticleIdRouteImport } from './routes/app/articles/$articleId'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/auth',
@@ -53,6 +54,11 @@ const AppCategoriesCategoryIdRoute = AppCategoriesCategoryIdRouteImport.update({
   path: '/categories/$categoryId',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppArticlesAddRoute = AppArticlesAddRouteImport.update({
+  id: '/articles/add',
+  path: '/articles/add',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppArticlesArticleIdRoute = AppArticlesArticleIdRouteImport.update({
   id: '/articles/$articleId',
   path: '/articles/$articleId',
@@ -67,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/auth/sign-up': typeof AuthSignUpRoute
   '/app/': typeof AppIndexRoute
   '/app/articles/$articleId': typeof AppArticlesArticleIdRoute
+  '/app/articles/add': typeof AppArticlesAddRoute
   '/app/categories/$categoryId': typeof AppCategoriesCategoryIdRoute
 }
 export interface FileRoutesByTo {
@@ -76,6 +83,7 @@ export interface FileRoutesByTo {
   '/auth/sign-up': typeof AuthSignUpRoute
   '/app': typeof AppIndexRoute
   '/app/articles/$articleId': typeof AppArticlesArticleIdRoute
+  '/app/articles/add': typeof AppArticlesAddRoute
   '/app/categories/$categoryId': typeof AppCategoriesCategoryIdRoute
 }
 export interface FileRoutesById {
@@ -87,6 +95,7 @@ export interface FileRoutesById {
   '/auth/sign-up': typeof AuthSignUpRoute
   '/app/': typeof AppIndexRoute
   '/app/articles/$articleId': typeof AppArticlesArticleIdRoute
+  '/app/articles/add': typeof AppArticlesAddRoute
   '/app/categories/$categoryId': typeof AppCategoriesCategoryIdRoute
 }
 export interface FileRouteTypes {
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/app/'
     | '/app/articles/$articleId'
+    | '/app/articles/add'
     | '/app/categories/$categoryId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/app'
     | '/app/articles/$articleId'
+    | '/app/articles/add'
     | '/app/categories/$categoryId'
   id:
     | '__root__'
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/app/'
     | '/app/articles/$articleId'
+    | '/app/articles/add'
     | '/app/categories/$categoryId'
   fileRoutesById: FileRoutesById
 }
@@ -178,6 +190,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCategoriesCategoryIdRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/app/articles/add': {
+      id: '/app/articles/add'
+      path: '/articles/add'
+      fullPath: '/app/articles/add'
+      preLoaderRoute: typeof AppArticlesAddRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/app/articles/$articleId': {
       id: '/app/articles/$articleId'
       path: '/articles/$articleId'
@@ -191,12 +210,14 @@ declare module '@tanstack/react-router' {
 interface AppRouteRouteChildren {
   AppIndexRoute: typeof AppIndexRoute
   AppArticlesArticleIdRoute: typeof AppArticlesArticleIdRoute
+  AppArticlesAddRoute: typeof AppArticlesAddRoute
   AppCategoriesCategoryIdRoute: typeof AppCategoriesCategoryIdRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppIndexRoute: AppIndexRoute,
   AppArticlesArticleIdRoute: AppArticlesArticleIdRoute,
+  AppArticlesAddRoute: AppArticlesAddRoute,
   AppCategoriesCategoryIdRoute: AppCategoriesCategoryIdRoute,
 }
 
