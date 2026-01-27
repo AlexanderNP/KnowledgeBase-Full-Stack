@@ -1,18 +1,11 @@
 import { CategoryCard } from "@/modules/category/components/CategoryCard";
 import { CategoryListSkeleton } from "@/modules/category/components/CategoryListSkeleton";
-import { categoriesControllerGetCategoriesOptions } from "@/shared/api/generated/@tanstack/react-query.gen";
+import { categoriesQueryOptionsOptions } from "@/shared/api/queries";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 
 export function CategoryList() {
-  const {
-    data: categories,
-    isError,
-    isPending,
-  } = useQuery({
-    ...categoriesControllerGetCategoriesOptions(),
-    staleTime: Infinity,
-  });
+  const { data: categories, isError, isPending } = useQuery(categoriesQueryOptionsOptions());
 
   if (isPending) {
     return <CategoryListSkeleton />;
