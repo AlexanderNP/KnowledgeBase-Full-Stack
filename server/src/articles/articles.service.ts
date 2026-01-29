@@ -4,6 +4,7 @@ import { Article } from './articles.entity';
 import { MinioService } from 'src/minio/minio.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateArticleDto, UpdateArticleDto } from './dto';
+import { getMeadiaFilesFromMarkdown } from './utils';
 
 @Injectable()
 export class ArticlesService {
@@ -51,6 +52,8 @@ export class ArticlesService {
   }
 
   async createArticle(articleInput: CreateArticleDto): Promise<Article> {
+    const mediaFiles = getMeadiaFilesFromMarkdown(articleInput.content);
+
     const article = await this.prismaService.articles.create({
       data: {
         ...articleInput,
@@ -58,7 +61,7 @@ export class ArticlesService {
           connect: articleInput.categoryIds.map((id) => ({ id })),
         },
         mediaFiles: {
-          create: articleInput.mediaFiles,
+          create: mediaFiles,
         },
       },
       include: {
@@ -73,15 +76,16 @@ export class ArticlesService {
 
   async updateArticle(id: string, articleUpdateData: UpdateArticleDto) {
     const findArticle = await this.getArticle({ id });
+    const mediaFiles = getMeadiaFilesFromMarkdown(articleUpdateData.content);
 
-    if (articleUpdateData?.mediaFiles?.length) {
+    if (mediaFiles.length) {
       await this.deleteMediaFiles(id);
     }
 
     const data: Prisma.ArticlesUpdateInput = {
       ...articleUpdateData,
       mediaFiles: {
-        create: articleUpdateData.mediaFiles,
+        create: mediaFiles,
       },
     };
 

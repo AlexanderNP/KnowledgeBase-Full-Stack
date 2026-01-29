@@ -1,14 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { CreateMediaFilesDto } from './create-article.dto';
-import { Type } from 'class-transformer';
-import {
-  IsString,
-  Length,
-  IsArray,
-  ValidateNested,
-  ArrayNotEmpty,
-  IsOptional,
-} from 'class-validator';
+import { IsString, Length, ArrayNotEmpty, IsOptional } from 'class-validator';
 import { IsMongoIdArray } from 'src/common/decorators/mongo-id-array.decorator';
 
 export class UpdateArticleDto {
@@ -33,16 +24,6 @@ export class UpdateArticleDto {
   @IsOptional()
   @Length(20)
   content: string;
-
-  @ApiPropertyOptional({
-    type: [CreateMediaFilesDto],
-    description: 'Медиафайлы, прикрепленные к статье',
-  })
-  @IsArray()
-  @IsOptional()
-  @ValidateNested({ each: true })
-  @Type(() => CreateMediaFilesDto)
-  mediaFiles: CreateMediaFilesDto[];
 
   @ApiPropertyOptional({
     type: [String],

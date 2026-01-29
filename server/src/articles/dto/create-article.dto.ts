@@ -1,38 +1,6 @@
-import {
-  IsString,
-  IsMongoId,
-  Length,
-  IsNotEmpty,
-  ArrayNotEmpty,
-  ValidateNested,
-  IsArray,
-  IsEnum,
-  IsOptional,
-} from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { FileTypes } from 'generated/prisma';
+import { IsString, IsMongoId, Length, IsNotEmpty, ArrayNotEmpty } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 import { IsMongoIdArray } from 'src/common/decorators/mongo-id-array.decorator';
-
-export class CreateMediaFilesDto {
-  @ApiProperty({
-    type: 'string',
-    description: 'URL медиафайла',
-    example: 'https://example.com/image.jpg',
-  })
-  @IsString()
-  @IsNotEmpty()
-  url: string;
-
-  @ApiProperty({
-    enum: FileTypes,
-    description: 'Тип файла',
-    example: FileTypes.IMG,
-  })
-  @IsEnum(FileTypes)
-  @IsNotEmpty()
-  type: FileTypes;
-}
 
 export class CreateArticleDto {
   @ApiProperty({
@@ -65,16 +33,6 @@ export class CreateArticleDto {
   @IsMongoId()
   @IsNotEmpty()
   authorId: string;
-
-  @ApiPropertyOptional({
-    type: [CreateMediaFilesDto],
-    description: 'Медиафайлы, прикрепленные к статье',
-  })
-  @IsArray()
-  @IsOptional()
-  @ValidateNested({ each: true })
-  @Type(() => CreateMediaFilesDto)
-  mediaFiles?: CreateMediaFilesDto[];
 
   @ApiProperty({
     type: [String],
