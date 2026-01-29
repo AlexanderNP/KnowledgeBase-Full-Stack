@@ -113,17 +113,6 @@ export type UpdateCategoryDto = {
   description?: string;
 };
 
-export type CreateMediaFilesDto = {
-  /**
-   * URL медиафайла
-   */
-  url: string;
-  /**
-   * Тип файла
-   */
-  type: "DOCUMENT" | "IMG";
-};
-
 export type CreateArticleDto = {
   /**
    * Заголовок статьи
@@ -137,10 +126,6 @@ export type CreateArticleDto = {
    * ID автора статьи (MongoDB ObjectId)
    */
   authorId: string;
-  /**
-   * Медиафайлы, прикрепленные к статье
-   */
-  mediaFiles?: Array<CreateMediaFilesDto>;
   /**
    * Массив ID категорий (MongoDB ObjectId)
    */
@@ -168,10 +153,6 @@ export type UpdateArticleDto = {
    * Содержание статьи
    */
   content?: string;
-  /**
-   * Медиафайлы, прикрепленные к статье
-   */
-  mediaFiles?: Array<CreateMediaFilesDto>;
   /**
    * Массив ID категорий (MongoDB ObjectId)
    */
