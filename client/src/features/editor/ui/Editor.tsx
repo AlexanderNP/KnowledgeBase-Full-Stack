@@ -70,7 +70,6 @@ export const Editor = ({
       value={value}
       onChange={onChange}
       preview="edit"
-      height={700}
       commands={filterCommands()}
     />
   );

@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Loader } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { FormErrorField } from "@/modules/auth/components/FormErrorField";
+import { ErrorFields } from "@/components/ErrorFields";
 import { useFormSignIn } from "@/modules/auth/hooks/useFormSignIn";
 
 export function FormSignIn() {
@@ -41,7 +41,7 @@ export function FormSignIn() {
                 onBlur={handleBlur}
                 onChange={(e) => handleChange(e.target.value)}
               />
-              <FormErrorField meta={state.meta} />
+              <ErrorFields meta={state.meta} />
             </div>
           )}
         />
@@ -58,7 +58,7 @@ export function FormSignIn() {
                 onBlur={handleBlur}
                 onChange={(e) => handleChange(e.target.value)}
               />
-              <FormErrorField meta={state.meta} />
+              <ErrorFields meta={state.meta} />
             </div>
           )}
         />

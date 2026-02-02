@@ -1,4 +1,5 @@
 import { Header } from "@/app/ui/Header";
+import { HeaderSkeleton } from "@/app/ui/HeaderSkeleton";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { useUserProfile } from "@/modules/user";
 
@@ -6,11 +7,11 @@ export const Route = createFileRoute("/app")({
   component: Home,
 });
 function Home() {
-  useUserProfile();
+  const { isLoading } = useUserProfile();
 
   return (
     <>
-      <Header />
+      {isLoading ? <HeaderSkeleton /> : <Header />}
       <main className="min-h-[100%]">
         <div className="mx-auto h-[85vh] max-w-[1366px] py-10">
           <Outlet />

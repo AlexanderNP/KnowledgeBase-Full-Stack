@@ -9,7 +9,7 @@ interface IFormErrorFieldProps {
   };
 }
 
-export function FormErrorField({ meta }: IFormErrorFieldProps) {
+export function ErrorFields({ meta }: IFormErrorFieldProps) {
   return (
     <AnimatePresence>
       {!meta.isValid &&

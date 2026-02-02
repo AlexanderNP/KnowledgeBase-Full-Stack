@@ -1172,6 +1172,7 @@ interface MultiSelectProps<T> extends Omit<MultiSelectBaseProps, "options"> {
   options: T[];
   optionLabel?: keyof T;
   optionValue?: keyof T;
+  invalid?: boolean;
 }
 
 type MultiSelectComponent = <T extends Record<string, any>>(
@@ -1179,7 +1180,7 @@ type MultiSelectComponent = <T extends Record<string, any>>(
 ) => React.ReactElement | null;
 
 export const MultiSelect = React.forwardRef(
-  ({ optionLabel, optionValue, options, ...props }, ref) => {
+  ({ optionLabel, optionValue, options, invalid, ...props }, ref) => {
     const resolvedOptions = options.map((item) => ({
       label: optionLabel ? item[optionLabel] : item,
       value: optionValue ? item[optionValue] : item,
@@ -1187,6 +1188,7 @@ export const MultiSelect = React.forwardRef(
 
     return (
       <MultiSelectBase
+        className={invalid ? "border-destructive" : ""}
         ref={ref}
         {...props}
         options={resolvedOptions}

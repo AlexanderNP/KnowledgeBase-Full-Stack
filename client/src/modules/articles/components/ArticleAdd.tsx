@@ -1,15 +1,17 @@
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field as UiField, FieldLabel as UiFieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Editor } from "@/features/editor";
 import { categoriesQueryOptionsOptions } from "@/shared/api/queries";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useCreateArticle } from "../hooks/useCreateArticle";
+import { Button } from "@/components/ui/button";
+import { CirclePlus, Loader } from "lucide-react";
+import { ErrorFields } from "@/components/ErrorFields";
 
 export const ArticleAdd = () => {
-  const [content, setContent] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const { Field, Subscribe, handleSubmit } = useCreateArticle();
   const { data: categories, status } = useQuery(categoriesQueryOptionsOptions());
 
   // Добавить всю обработку добавления статьи
@@ -23,9 +25,9 @@ export const ArticleAdd = () => {
           <Skeleton className="h-[100px] flex-1" />
           <Skeleton className="h-[100px] flex-1" />
         </div>
-        <Field className="mb-6">
+        <UiField className="mb-6">
           <Skeleton className="flex h-[700px] w-[100%]" />
-        </Field>
+        </UiField>
       </div>
     );
   }
@@ -39,45 +41,92 @@ export const ArticleAdd = () => {
   }
 
   return (
-    <div className="flex flex-col gap-10">
-      <div className="flex items-center justify-between gap-5.5">
-        <Field>
-          <FieldLabel
-            htmlFor="article-name"
-            className="text-xl"
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit();
+      }}
+      className="flex flex-col gap-10"
+    >
+      <Subscribe
+        selector={(state) => [state.canSubmit, state.isSubmitting]}
+        children={([canSubmit, isSubmitting]) => (
+          <Button
+            type="submit"
+            className="ml-auto animate-bounce bg-emerald-800 text-amber-100 hover:bg-emerald-700"
+            size="lg"
+            disabled={!canSubmit || isSubmitting}
           >
-            Введите название статьи <span className="text-destructive">*</span>
-          </FieldLabel>
-          <Input
-            id="article-name"
-            placeholder="Статья"
-            required
-          />
-        </Field>
+            {isSubmitting ? <Loader className="animate-spin" /> : <CirclePlus />}
+            Создать
+          </Button>
+        )}
+      />
+      <div className="flex items-center justify-between gap-5.5">
+        <Field
+          name="title"
+          children={({ state, handleChange }) => (
+            <UiField data-invalid={!state.meta.isValid}>
+              <UiFieldLabel
+                htmlFor="article-name"
+                className="text-xl"
+              >
+                Введите название статьи <span className="text-destructive">*</span>
+              </UiFieldLabel>
+              <Input
+                className="h-[40px]"
+                value={state.value}
+                onChange={(e) => handleChange(e.target.value)}
+                id="article-name"
+                aria-invalid={!state.meta.isValid}
+                placeholder="Статья"
+              />
+              <ErrorFields meta={state.meta} />
+            </UiField>
+          )}
+        />
         {categories && (
-          <Field>
-            <FieldLabel className="text-xl">
-              Выберите категории <span className="text-destructive">*</span>
-            </FieldLabel>
-            <MultiSelect
-              options={categories}
-              optionLabel="name"
-              optionValue="id"
-              maxCount={4}
-              value={selectedCategories}
-              onValueChange={setSelectedCategories}
-              placeholder="Категория"
-            />
-          </Field>
+          <Field
+            name="categoryIds"
+            children={({ state, handleChange }) => (
+              <UiField data-invalid={!state.meta.isValid}>
+                <UiFieldLabel className="text-xl">
+                  Выберите категории <span className="text-destructive">*</span>
+                </UiFieldLabel>
+                <MultiSelect
+                  invalid={!state.meta.isValid}
+                  options={categories}
+                  optionLabel="name"
+                  optionValue="id"
+                  maxCount={4}
+                  value={state.value}
+                  onValueChange={handleChange}
+                  placeholder="Категория"
+                />
+                <ErrorFields meta={state.meta} />
+              </UiField>
+            )}
+          />
         )}
       </div>
-      <Field className="mb-6">
-        <FieldLabel className="text-xl">Содержимое: </FieldLabel>
-        <Editor
-          onChange={setContent}
-          value={content}
-        />
-      </Field>
-    </div>
+      <Field
+        name="content"
+        children={({ state, handleChange }) => (
+          <UiField
+            className="mb-6"
+            data-invalid={!state.meta.isValid}
+          >
+            <UiFieldLabel className="text-xl">
+              Содержимое <span className="text-destructive">*</span>
+            </UiFieldLabel>
+            <Editor
+              onChange={(value) => handleChange(value ?? "")}
+              value={state.value}
+            />
+            <ErrorFields meta={state.meta} />
+          </UiField>
+        )}
+      />
+    </form>
   );
 };

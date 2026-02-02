@@ -19,10 +19,12 @@ export const apiClient = () => {
     return req;
   });
 
+  // Баг, в запросе на /auth отправляет в куках refreshToken. Его нужно игнорировать.
+
   client.interceptors.response.use(async (res, req, options) => {
     if (res.status !== 401) return res;
 
-    if (options.url.includes("/auth/refresh")) return res;
+    if (options.url.includes("/auth")) return res;
 
     const oldToken = localStorageRead<string>(ACCESS_TOKEN_STORAGE_KEY);
 

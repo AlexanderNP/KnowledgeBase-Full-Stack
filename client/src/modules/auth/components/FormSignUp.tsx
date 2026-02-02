@@ -3,7 +3,7 @@ import { Label } from "@radix-ui/react-label";
 import { Input } from "@/components/ui/input";
 import { Loader } from "lucide-react";
 import { useFormSignUp } from "@/modules/auth/hooks/useFormSignUp";
-import { FormErrorField } from "@/modules/auth/components/FormErrorField";
+import { ErrorFields } from "@/components/ErrorFields";
 
 export function FormSignUp() {
   const { Field, Subscribe, handleSubmit } = useFormSignUp();
@@ -30,7 +30,7 @@ export function FormSignUp() {
                 onBlur={handleBlur}
                 onChange={(e) => handleChange(e.target.value)}
               />
-              <FormErrorField meta={state.meta} />
+              <ErrorFields meta={state.meta} />
             </div>
           )}
         />
@@ -46,7 +46,7 @@ export function FormSignUp() {
                 onBlur={handleBlur}
                 onChange={(e) => handleChange(e.target.value)}
               />
-              <FormErrorField meta={state.meta} />
+              <ErrorFields meta={state.meta} />
             </div>
           )}
         />
@@ -62,7 +62,7 @@ export function FormSignUp() {
                 onBlur={handleBlur}
                 onChange={(e) => handleChange(e.target.value)}
               />
-              <FormErrorField meta={state.meta} />
+              <ErrorFields meta={state.meta} />
             </div>
           )}
         />

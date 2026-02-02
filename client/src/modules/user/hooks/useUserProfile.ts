@@ -8,7 +8,7 @@ export function useUserProfile() {
   const { sessionId, token } = useAuthContext();
   const { setUser } = useUserContext();
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     ...userControllerGetCategoryByIdOptions({
       path: {
         id: sessionId!,
@@ -19,4 +19,8 @@ export function useUserProfile() {
   });
 
   useEffect(() => setUser(data ?? null), [data, setUser]);
+
+  return {
+    isLoading,
+  };
 }

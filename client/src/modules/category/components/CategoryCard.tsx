@@ -24,11 +24,15 @@ export const CategoryCard = (category: Category) => {
           />
         </CardAction>
       </CardHeader>
-      <CardContent>
-        <img
-          src={category.imageUrl ?? fallbackImgUrl}
-          alt={category.name}
-        />
+      <CardContent className="h-[350px] w-[350px]">
+        <div className="relative w-full overflow-hidden rounded-md bg-muted">
+          <div className="w-full pt-[75%]" />
+          <img
+            className="absolute inset-0 h-full w-full object-contain"
+            src={category.imageUrl ?? fallbackImgUrl}
+            alt={category.name}
+          />
+        </div>
       </CardContent>
     </Card>
   );
