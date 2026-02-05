@@ -48,13 +48,7 @@ const documentCommand: ICommand = {
   ),
 };
 
-export const Editor = ({
-  value,
-  onChange,
-}: {
-  value: MDEditorProps["value"];
-  onChange: MDEditorProps["onChange"];
-}) => {
+export const Editor = ({ value, onChange, ...props }: MDEditorProps) => {
   const { theme } = useTheme();
 
   const filterCommands = () => [
@@ -66,6 +60,9 @@ export const Editor = ({
 
   return (
     <MDEditor
+      {...props}
+      autoFocus={true}
+      autoFocusEnd={true}
       data-color-mode={theme}
       value={value}
       onChange={onChange}

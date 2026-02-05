@@ -1,9 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ArticlePreview } from "@/modules/articles";
 
 export const Route = createFileRoute("/app/articles/$articleId")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  return <div>Hello "/app/articles/$articleId"!</div>;
+  const { articleId } = Route.useParams();
+
+  return <ArticlePreview id={articleId} />;
 }

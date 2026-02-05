@@ -2,7 +2,7 @@ import { Field as UiField, FieldLabel as UiFieldLabel } from "@/components/ui/fi
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Editor } from "@/features/editor";
+import { Editor } from "@/features/markdown-editor";
 import { categoriesQueryOptionsOptions } from "@/shared/api/queries";
 import { useQuery } from "@tanstack/react-query";
 import { useCreateArticle } from "../hooks/useCreateArticle";
@@ -13,10 +13,6 @@ import { ErrorFields } from "@/components/ErrorFields";
 export const ArticleAdd = () => {
   const { Field, Subscribe, handleSubmit } = useCreateArticle();
   const { data: categories, status } = useQuery(categoriesQueryOptionsOptions());
-
-  // Добавить всю обработку добавления статьи
-  /// 1) Добавить валидацию + обработку роута на создание статьи
-  /// 2) Перейти на разработку фичи просмотра статьи (Previewer)
 
   if (status === "pending") {
     return (
@@ -35,7 +31,7 @@ export const ArticleAdd = () => {
   if (status === "error") {
     return (
       <div className="flex items-center justify-center">
-        <p className="text-2xl">{"Что-то пошло не так :("}</p>
+        <p className="text-2xl">Что-то пошло не так :(</p>
       </div>
     );
   }
@@ -46,7 +42,7 @@ export const ArticleAdd = () => {
         e.preventDefault();
         handleSubmit();
       }}
-      className="flex flex-col gap-10"
+      className="flex h-[100%] flex-col gap-4"
     >
       <Subscribe
         selector={(state) => [state.canSubmit, state.isSubmitting]}
@@ -113,7 +109,7 @@ export const ArticleAdd = () => {
         name="content"
         children={({ state, handleChange }) => (
           <UiField
-            className="mb-6"
+            className="mb-6 grow"
             data-invalid={!state.meta.isValid}
           >
             <UiFieldLabel className="text-xl">

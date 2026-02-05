@@ -55,7 +55,7 @@ export const EditorUploadFile = ({
       </PopoverTrigger>
       <PopoverContent
         align="start"
-        className="border-none p-0"
+        className="z-[99999] border-none p-0"
       >
         <FilePicker
           type={typeFile}

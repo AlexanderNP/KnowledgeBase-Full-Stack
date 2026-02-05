@@ -20,7 +20,7 @@ export const EditorDocument = (props: {
       onSuccess={handleMDPaste}
       typeFile="DOCUMENT"
     >
-      <button>
+      <button disabled={props.disabled}>
         <FileSymlink size={14} />
       </button>
     </EditorUploadFile>

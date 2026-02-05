@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { UserRound } from "lucide-react";
+import { NotebookPen, UserRound } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useUserContext } from "@/shared/contexts/user";
 import { UserCardAvatar } from "@/modules/user";
@@ -15,9 +15,20 @@ export const Header = () => {
         <Link to="/app">База знаний</Link>
       </h1>
       {user ? (
-        <UserCardAvatar user={user}>
-          <LogoutButton />
-        </UserCardAvatar>
+        <>
+          <Button
+            asChild
+            variant="outline"
+          >
+            <Link to="/app/articles/add">
+              <NotebookPen />
+              Создать статью
+            </Link>
+          </Button>
+          <UserCardAvatar user={user}>
+            <LogoutButton />
+          </UserCardAvatar>
+        </>
       ) : (
         <Button asChild>
           <Link to="/auth/sign-in">
