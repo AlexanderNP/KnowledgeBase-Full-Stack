@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom/client";
 import { StrictMode } from "react";
-import { routeTree } from "@/routeTree.gen";
+import { routeTree } from "@/app/routeTree.gen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { apiClient } from "@/shared/api";
 import { RouterProvider, createRouter } from "@tanstack/react-router";

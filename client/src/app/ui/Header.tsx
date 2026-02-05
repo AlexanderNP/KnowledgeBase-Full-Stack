@@ -2,9 +2,9 @@ import { Button } from "@/components/ui/button";
 import { NotebookPen, UserRound } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useUserContext } from "@/shared/contexts/user";
-import { UserCardAvatar } from "@/modules/user";
+import { UserCardAvatar } from "@/entities/user";
 import { ThemeSwitcher } from "@/features/theme-switcher/ui";
-import { LogoutButton } from "@/modules/auth";
+import { LogoutButton } from "@/features/logout";
 
 export const Header = () => {
   const { user } = useUserContext();
@@ -20,7 +20,7 @@ export const Header = () => {
             asChild
             variant="outline"
           >
-            <Link to="/app/articles/add">
+            <Link to="/app/articles/edit">
               <NotebookPen />
               Создать статью
             </Link>
