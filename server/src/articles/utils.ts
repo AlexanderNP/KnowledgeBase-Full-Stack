@@ -1,6 +1,7 @@
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { visit } from 'unist-util-visit';
 import { CreateMediaFilesDto } from './articles.entity';
+import type { HeadingData } from 'mdast/index';
 
 export const getMeadiaFilesFromMarkdown = (md: string) => {
   const tree = fromMarkdown(md);
@@ -16,7 +17,7 @@ export const getMeadiaFilesFromMarkdown = (md: string) => {
   });
 
   visit(tree, 'link', function (node) {
-    const isDocument = /\.(pdf|doc|docx)$/i.test(node.url as string);
+    const isDocument = /\.(pdf|doc|docx)$/i.test(node.url);
 
     if (!isDocument) return;
 
@@ -27,4 +28,19 @@ export const getMeadiaFilesFromMarkdown = (md: string) => {
   });
 
   return [...images, ...documents];
+};
+
+export const getHeadingsFromMarkdown = (md: string) => {
+  const tree = fromMarkdown(md);
+
+  const headings: string[] = [];
+
+  visit(tree, 'heading', function (node) {
+    if (node.depth !== 1 || node.children[0].type !== 'text') return;
+
+    const textValue = node.children[0].value;
+    headings.push(textValue);
+  });
+
+  return headings;
 };

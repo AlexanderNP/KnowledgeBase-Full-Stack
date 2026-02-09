@@ -1,10 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from 'generated/prisma';
-import { Article } from './articles.entity';
+import {
+  ArticleCreate,
+  ArticleDeleted,
+  Article,
+  ArticleWithHeadings,
+  ArticleUpdate,
+} from './articles.entity';
 import { MinioService } from 'src/minio/minio.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateArticleDto, UpdateArticleDto } from './dto';
-import { getMeadiaFilesFromMarkdown } from './utils';
+import { getHeadingsFromMarkdown, getMeadiaFilesFromMarkdown } from './utils';
 
 @Injectable()
 export class ArticlesService {
@@ -18,29 +24,31 @@ export class ArticlesService {
     take?: number;
     where?: Prisma.ArticlesWhereInput;
     orderBy?: Prisma.ArticlesOrderByWithRelationInput;
-  }): Promise<Article[]> {
+  }) {
     const { skip, take, where, orderBy } = params;
 
-    return await this.prismaService.articles.findMany({
+    const articles: Article[] = await this.prismaService.articles.findMany({
       skip,
       take,
       where,
       orderBy,
       include: {
-        mediaFiles: true,
-        categories: true,
-        comments: true,
+        mediaFiles: { select: { type: true, url: true } },
+        categories: { select: { id: true, name: true } },
+        comments: { select: { id: true, userId: true, content: true } },
       },
     });
+
+    return articles;
   }
 
   async getArticle(articleWhereUniqueInput: Prisma.ArticlesWhereUniqueInput) {
-    const findArticle = await this.prismaService.articles.findUnique({
+    const findArticle: Article | null = await this.prismaService.articles.findUnique({
       where: articleWhereUniqueInput,
       include: {
-        mediaFiles: true,
-        categories: true,
-        comments: true,
+        mediaFiles: { select: { type: true, url: true } },
+        categories: { select: { id: true, name: true } },
+        comments: { select: { id: true, userId: true, content: true } },
       },
     });
 
@@ -48,13 +56,17 @@ export class ArticlesService {
       throw new NotFoundException(`Статья по ID ${articleWhereUniqueInput.id} не найдена`);
     }
 
-    return findArticle;
+    const headings = getHeadingsFromMarkdown(findArticle.content);
+
+    const article: ArticleWithHeadings = { ...findArticle, headings };
+
+    return article;
   }
 
-  async createArticle(articleInput: CreateArticleDto): Promise<Article> {
+  async createArticle(articleInput: CreateArticleDto) {
     const mediaFiles = getMeadiaFilesFromMarkdown(articleInput.content);
 
-    const article = await this.prismaService.articles.create({
+    const article: ArticleCreate = await this.prismaService.articles.create({
       data: {
         ...articleInput,
         categories: {
@@ -63,11 +75,6 @@ export class ArticlesService {
         mediaFiles: {
           create: mediaFiles,
         },
-      },
-      include: {
-        mediaFiles: true,
-        categories: true,
-        comments: true,
       },
     });
 
@@ -96,35 +103,33 @@ export class ArticlesService {
       };
     }
 
-    return this.prismaService.articles.update({
+    const article: ArticleUpdate = await this.prismaService.articles.update({
       where: { id },
       data,
-      include: {
-        mediaFiles: true,
-        categories: true,
-        comments: true,
-      },
     });
+
+    return article;
   }
 
-  async deleteArticle(where: Prisma.ArticlesWhereUniqueInput): Promise<Article> {
+  async deleteArticle(where: Prisma.ArticlesWhereUniqueInput) {
     const { id, mediaFiles } = await this.getArticle(where);
 
     if (mediaFiles.length) {
       await this.deleteMediaFiles(id);
     }
 
-    const deletedArticle = await this.prismaService.articles.delete({
+    const deletedArticle: ArticleDeleted = await this.prismaService.articles.delete({
       where: { id },
+      select: { id: true },
     });
 
     return deletedArticle;
   }
 
-  async updateViews(id: string): Promise<Article> {
+  async updateViews(id: string) {
     await this.getArticle({ id });
 
-    return this.prismaService.articles.update({
+    const article: ArticleUpdate = await this.prismaService.articles.update({
       where: {
         id,
       },
@@ -134,12 +139,14 @@ export class ArticlesService {
         },
       },
     });
+
+    return article;
   }
 
-  async updateLikes(id: string, like: boolean): Promise<Article> {
+  async updateLikes(id: string, like: boolean) {
     await this.getArticle({ id });
 
-    return this.prismaService.articles.update({
+    const article: ArticleUpdate = await this.prismaService.articles.update({
       where: {
         id,
       },
@@ -153,6 +160,8 @@ export class ArticlesService {
             },
       },
     });
+
+    return article;
   }
 
   async createFile(file: Express.Multer.File): Promise<string> {

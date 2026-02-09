@@ -12,7 +12,6 @@ import {
 } from '@nestjs/common';
 import { ArticlesService } from './articles.service';
 import { CreateArticleDto, UpdateArticleDto, FileUploadDto } from './dto';
-import { Article } from './articles.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ValidationMongoIdPipe } from 'src/common/pipes/validation.mongoId.pipe';
 import { AuthWithoutRoles } from 'src/auth/decorators';
@@ -24,12 +23,12 @@ export class ArticlesController {
 
   @AuthWithoutRoles()
   @Post()
-  async create(@Body() createArticleDto: CreateArticleDto): Promise<Article> {
+  async create(@Body() createArticleDto: CreateArticleDto) {
     return await this.articlesService.createArticle(createArticleDto);
   }
 
   @Get()
-  async getAticles(@Query() query: { title: string }): Promise<Article[]> {
+  async getAticles(@Query() query: { title: string }) {
     return this.articlesService.getArticles({
       where: {
         title: {
@@ -41,7 +40,7 @@ export class ArticlesController {
   }
 
   @Get(':id')
-  async getArticleById(@Param('id', ValidationMongoIdPipe) id: string): Promise<Article> {
+  async getArticleById(@Param('id', ValidationMongoIdPipe) id: string) {
     return await this.articlesService.getArticle({ id });
   }
 
@@ -61,13 +60,13 @@ export class ArticlesController {
   async updateArticle(
     @Param('id', ValidationMongoIdPipe) id: string,
     @Body() updateArticleDto: UpdateArticleDto,
-  ): Promise<Article> {
+  ) {
     return this.articlesService.updateArticle(id, updateArticleDto);
   }
 
   @AuthWithoutRoles()
   @Delete(':id')
-  async deleteArticle(@Param('id', ValidationMongoIdPipe) id: string): Promise<Article> {
+  async deleteArticle(@Param('id', ValidationMongoIdPipe) id: string) {
     return this.articlesService.deleteArticle({ id });
   }
 
