@@ -132,6 +132,29 @@ export type CreateArticleDto = {
   categoryIds: Array<string>;
 };
 
+export type ArticleCreate = {
+  id: string;
+  title: string;
+  content: string;
+  viewCount: number;
+  likesCount: number;
+  authorId: string;
+  createdAt: string;
+  updateAt: string;
+  categoryIds: Array<string>;
+};
+
+export type CreateMediaFilesDto = {
+  /**
+   * URL медиафайла
+   */
+  url: string;
+  /**
+   * Тип файла
+   */
+  type: "DOCUMENT" | "IMG";
+};
+
 export type Article = {
   id: string;
   title: string;
@@ -139,9 +162,54 @@ export type Article = {
   viewCount: number;
   likesCount: number;
   authorId: string;
-  categoryIds: Array<string>;
   createdAt: string;
   updateAt: string;
+  categoryIds: Array<string>;
+  categories: Array<{
+    id: string;
+    name: string;
+  }>;
+  mediaFiles: Array<CreateMediaFilesDto>;
+  comments: Array<{
+    id: string;
+    userId: string;
+    content: string;
+  }>;
+};
+
+export type ArticleWithHeadings = {
+  id: string;
+  title: string;
+  content: string;
+  viewCount: number;
+  likesCount: number;
+  authorId: string;
+  createdAt: string;
+  updateAt: string;
+  categoryIds: Array<string>;
+  categories: Array<{
+    id: string;
+    name: string;
+  }>;
+  mediaFiles: Array<CreateMediaFilesDto>;
+  comments: Array<{
+    id: string;
+    userId: string;
+    content: string;
+  }>;
+  headings: Array<string>;
+};
+
+export type ArticleUpdate = {
+  id: string;
+  title: string;
+  content: string;
+  viewCount: number;
+  likesCount: number;
+  authorId: string;
+  createdAt: string;
+  updateAt: string;
+  categoryIds: Array<string>;
 };
 
 export type UpdateArticleDto = {
@@ -157,6 +225,10 @@ export type UpdateArticleDto = {
    * Массив ID категорий (MongoDB ObjectId)
    */
   categoryIds?: Array<string>;
+};
+
+export type ArticleDeleted = {
+  id: string;
 };
 
 export type FileUploadDto = {
@@ -371,7 +443,7 @@ export type ArticlesControllerCreateData = {
 };
 
 export type ArticlesControllerCreateResponses = {
-  201: Article;
+  201: ArticleCreate;
 };
 
 export type ArticlesControllerCreateResponse =
@@ -387,7 +459,7 @@ export type ArticlesControllerDeleteArticleData = {
 };
 
 export type ArticlesControllerDeleteArticleResponses = {
-  200: Article;
+  200: ArticleDeleted;
 };
 
 export type ArticlesControllerDeleteArticleResponse =
@@ -403,7 +475,7 @@ export type ArticlesControllerGetArticleByIdData = {
 };
 
 export type ArticlesControllerGetArticleByIdResponses = {
-  200: Article;
+  200: ArticleWithHeadings;
 };
 
 export type ArticlesControllerGetArticleByIdResponse =
@@ -419,7 +491,7 @@ export type ArticlesControllerUpdateViewsData = {
 };
 
 export type ArticlesControllerUpdateViewsResponses = {
-  200: Article;
+  200: ArticleUpdate;
 };
 
 export type ArticlesControllerUpdateViewsResponse =
@@ -435,7 +507,7 @@ export type ArticlesControllerUpdateLikesData = {
 };
 
 export type ArticlesControllerUpdateLikesResponses = {
-  200: Article;
+  200: ArticleUpdate;
 };
 
 export type ArticlesControllerUpdateLikesResponse =
@@ -451,7 +523,7 @@ export type ArticlesControllerUpdateArticleData = {
 };
 
 export type ArticlesControllerUpdateArticleResponses = {
-  200: Article;
+  200: ArticleUpdate;
 };
 
 export type ArticlesControllerUpdateArticleResponse =
