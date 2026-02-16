@@ -1,10 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ArticleEdit } from "@/pages/article-edit";
 
-export const Route = createFileRoute("/app/articles/edit")({
+export const Route = createFileRoute("/app/articles/edit/$articleid")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  return <ArticleEdit />;
+  const { articleid } = Route.useParams();
+
+  return <ArticleEdit id={articleid} />;
 }

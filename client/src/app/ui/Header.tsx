@@ -15,20 +15,9 @@ export const Header = () => {
         <Link to="/app">База знаний</Link>
       </h1>
       {user ? (
-        <>
-          <Button
-            asChild
-            variant="outline"
-          >
-            <Link to="/app/articles/edit">
-              <NotebookPen />
-              Создать статью
-            </Link>
-          </Button>
-          <UserCardAvatar user={user}>
-            <LogoutButton />
-          </UserCardAvatar>
-        </>
+        <UserCardAvatar user={user}>
+          <LogoutButton />
+        </UserCardAvatar>
       ) : (
         <Button asChild>
           <Link to="/auth/sign-in">
@@ -37,6 +26,15 @@ export const Header = () => {
           </Link>
         </Button>
       )}
+      <Button
+        asChild
+        variant="outline"
+      >
+        <Link to="/app/articles/edit">
+          <NotebookPen />
+          Создать статью
+        </Link>
+      </Button>
       <ThemeSwitcher />
     </header>
   );

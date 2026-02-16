@@ -18,6 +18,7 @@ const initialStateAuth: AuthProviderState = {
 const initialStateUser = {
   user: null,
   setUser: () => null,
+  hasPermission: () => false,
 };
 
 export const ThemeContext = createContext<ThemeProviderState>(initialStateTheme);

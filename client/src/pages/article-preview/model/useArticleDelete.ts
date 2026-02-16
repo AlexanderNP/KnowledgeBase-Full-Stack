@@ -22,7 +22,7 @@ export const useArticleDelete = (article: Article) => {
     toast.error(error.message);
   };
 
-  const { mutate: deleteArticle } = useMutation({
+  const { mutateAsync: deleteArticle } = useMutation({
     ...articlesControllerDeleteArticleMutation(),
     onError: handleError,
     onSuccess: handleSuccess,

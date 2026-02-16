@@ -5,8 +5,8 @@ export const ArticleToUpdate = ({ id }: { id: string }) => {
   return (
     <Button asChild>
       <Link
-        to="/app/articles/edit"
-        params={id}
+        to="/app/articles/edit/$articleid"
+        params={{ articleid: id }}
       >
         Редактировать
       </Link>

@@ -16,8 +16,10 @@ import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as AppCategoriesCategoryIdRouteImport } from './routes/app/categories/$categoryId'
-import { Route as AppArticlesEditRouteImport } from './routes/app/articles/edit'
 import { Route as AppArticlesArticleIdRouteImport } from './routes/app/articles/$articleId'
+import { Route as AppArticlesEditRouteRouteImport } from './routes/app/articles/edit/route'
+import { Route as AppArticlesEditIndexRouteImport } from './routes/app/articles/edit/index'
+import { Route as AppArticlesEditArticleidRouteImport } from './routes/app/articles/edit/$articleid'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/auth',
@@ -54,16 +56,27 @@ const AppCategoriesCategoryIdRoute = AppCategoriesCategoryIdRouteImport.update({
   path: '/categories/$categoryId',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const AppArticlesEditRoute = AppArticlesEditRouteImport.update({
-  id: '/articles/edit',
-  path: '/articles/edit',
-  getParentRoute: () => AppRouteRoute,
-} as any)
 const AppArticlesArticleIdRoute = AppArticlesArticleIdRouteImport.update({
   id: '/articles/$articleId',
   path: '/articles/$articleId',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppArticlesEditRouteRoute = AppArticlesEditRouteRouteImport.update({
+  id: '/articles/edit',
+  path: '/articles/edit',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppArticlesEditIndexRoute = AppArticlesEditIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppArticlesEditRouteRoute,
+} as any)
+const AppArticlesEditArticleidRoute =
+  AppArticlesEditArticleidRouteImport.update({
+    id: '/$articleid',
+    path: '/$articleid',
+    getParentRoute: () => AppArticlesEditRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -72,9 +85,11 @@ export interface FileRoutesByFullPath {
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/app/': typeof AppIndexRoute
+  '/app/articles/edit': typeof AppArticlesEditRouteRouteWithChildren
   '/app/articles/$articleId': typeof AppArticlesArticleIdRoute
-  '/app/articles/edit': typeof AppArticlesEditRoute
   '/app/categories/$categoryId': typeof AppCategoriesCategoryIdRoute
+  '/app/articles/edit/$articleid': typeof AppArticlesEditArticleidRoute
+  '/app/articles/edit/': typeof AppArticlesEditIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -83,8 +98,9 @@ export interface FileRoutesByTo {
   '/auth/sign-up': typeof AuthSignUpRoute
   '/app': typeof AppIndexRoute
   '/app/articles/$articleId': typeof AppArticlesArticleIdRoute
-  '/app/articles/edit': typeof AppArticlesEditRoute
   '/app/categories/$categoryId': typeof AppCategoriesCategoryIdRoute
+  '/app/articles/edit/$articleid': typeof AppArticlesEditArticleidRoute
+  '/app/articles/edit': typeof AppArticlesEditIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -94,9 +110,11 @@ export interface FileRoutesById {
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/app/': typeof AppIndexRoute
+  '/app/articles/edit': typeof AppArticlesEditRouteRouteWithChildren
   '/app/articles/$articleId': typeof AppArticlesArticleIdRoute
-  '/app/articles/edit': typeof AppArticlesEditRoute
   '/app/categories/$categoryId': typeof AppCategoriesCategoryIdRoute
+  '/app/articles/edit/$articleid': typeof AppArticlesEditArticleidRoute
+  '/app/articles/edit/': typeof AppArticlesEditIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -107,9 +125,11 @@ export interface FileRouteTypes {
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/app/'
-    | '/app/articles/$articleId'
     | '/app/articles/edit'
+    | '/app/articles/$articleId'
     | '/app/categories/$categoryId'
+    | '/app/articles/edit/$articleid'
+    | '/app/articles/edit/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -118,8 +138,9 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/app'
     | '/app/articles/$articleId'
-    | '/app/articles/edit'
     | '/app/categories/$categoryId'
+    | '/app/articles/edit/$articleid'
+    | '/app/articles/edit'
   id:
     | '__root__'
     | '/'
@@ -128,9 +149,11 @@ export interface FileRouteTypes {
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/app/'
-    | '/app/articles/$articleId'
     | '/app/articles/edit'
+    | '/app/articles/$articleId'
     | '/app/categories/$categoryId'
+    | '/app/articles/edit/$articleid'
+    | '/app/articles/edit/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -190,13 +213,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCategoriesCategoryIdRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/app/articles/edit': {
-      id: '/app/articles/edit'
-      path: '/articles/edit'
-      fullPath: '/app/articles/edit'
-      preLoaderRoute: typeof AppArticlesEditRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
     '/app/articles/$articleId': {
       id: '/app/articles/$articleId'
       path: '/articles/$articleId'
@@ -204,20 +220,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppArticlesArticleIdRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/app/articles/edit': {
+      id: '/app/articles/edit'
+      path: '/articles/edit'
+      fullPath: '/app/articles/edit'
+      preLoaderRoute: typeof AppArticlesEditRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/articles/edit/': {
+      id: '/app/articles/edit/'
+      path: '/'
+      fullPath: '/app/articles/edit/'
+      preLoaderRoute: typeof AppArticlesEditIndexRouteImport
+      parentRoute: typeof AppArticlesEditRouteRoute
+    }
+    '/app/articles/edit/$articleid': {
+      id: '/app/articles/edit/$articleid'
+      path: '/$articleid'
+      fullPath: '/app/articles/edit/$articleid'
+      preLoaderRoute: typeof AppArticlesEditArticleidRouteImport
+      parentRoute: typeof AppArticlesEditRouteRoute
+    }
   }
 }
 
+interface AppArticlesEditRouteRouteChildren {
+  AppArticlesEditArticleidRoute: typeof AppArticlesEditArticleidRoute
+  AppArticlesEditIndexRoute: typeof AppArticlesEditIndexRoute
+}
+
+const AppArticlesEditRouteRouteChildren: AppArticlesEditRouteRouteChildren = {
+  AppArticlesEditArticleidRoute: AppArticlesEditArticleidRoute,
+  AppArticlesEditIndexRoute: AppArticlesEditIndexRoute,
+}
+
+const AppArticlesEditRouteRouteWithChildren =
+  AppArticlesEditRouteRoute._addFileChildren(AppArticlesEditRouteRouteChildren)
+
 interface AppRouteRouteChildren {
   AppIndexRoute: typeof AppIndexRoute
+  AppArticlesEditRouteRoute: typeof AppArticlesEditRouteRouteWithChildren
   AppArticlesArticleIdRoute: typeof AppArticlesArticleIdRoute
-  AppArticlesEditRoute: typeof AppArticlesEditRoute
   AppCategoriesCategoryIdRoute: typeof AppCategoriesCategoryIdRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppIndexRoute: AppIndexRoute,
+  AppArticlesEditRouteRoute: AppArticlesEditRouteRouteWithChildren,
   AppArticlesArticleIdRoute: AppArticlesArticleIdRoute,
-  AppArticlesEditRoute: AppArticlesEditRoute,
   AppCategoriesCategoryIdRoute: AppCategoriesCategoryIdRoute,
 }
 

@@ -5,7 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { createArticleSchema } from "@/pages/article-edit/model/shemas";
 import { useUserContext } from "@/shared/contexts/user";
 import { articlesControllerCreateMutation } from "@/shared/api/generated/@tanstack/react-query.gen";
-import type { CreateArticleDto, Article } from "@/shared/api/generated";
+import type { CreateArticleDto, ArticleCreate } from "@/shared/api/generated";
 
 const defaultArticleState: CreateArticleDto = {
   content: "",
@@ -18,7 +18,7 @@ export function useCreateArticle() {
   const navigate = useNavigate();
   const { user } = useUserContext();
 
-  const handleSuccess = (data: Article) => {
+  const handleSuccess = (data: ArticleCreate) => {
     toast.success(`Статья ${data.title} успешно создан!`);
 
     navigate({
@@ -30,7 +30,7 @@ export function useCreateArticle() {
     toast.error(error.message);
   };
 
-  const { mutate: createArticle } = useMutation({
+  const { mutateAsync: createArticle } = useMutation({
     ...articlesControllerCreateMutation(),
     onError: handleError,
     onSuccess: handleSuccess,
@@ -39,7 +39,7 @@ export function useCreateArticle() {
   const { Field, handleSubmit, Subscribe } = useForm({
     defaultValues: { ...defaultArticleState, authorId: user?.id },
     onSubmit: async ({ value }) => {
-      createArticle({
+      return createArticle({
         body: {
           title: value.title,
           content: value.content,

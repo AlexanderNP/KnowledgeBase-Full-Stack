@@ -37,7 +37,7 @@ export function useSignIn() {
   const { Field, handleSubmit, Subscribe } = useForm({
     defaultValues: defaultSignInUser,
     onSubmit: async ({ value }) => {
-      authSignInMutation.mutate({
+      return authSignInMutation.mutateAsync({
         body: {
           ...value,
         },

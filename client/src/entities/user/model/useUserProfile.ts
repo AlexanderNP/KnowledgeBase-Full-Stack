@@ -15,12 +15,15 @@ export function useUserProfile() {
       },
       auth: token!,
     }),
-    enabled: !!sessionId || !!token,
+    enabled: !!sessionId && !!token,
   });
 
-  useEffect(() => setUser(data ?? null), [data, setUser]);
+  useEffect(() => {
+    setUser(data ?? null);
+  }, [data, setUser]);
 
   return {
+    user: data,
     isLoading,
   };
 }

@@ -1,19 +1,19 @@
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { AppProviders } from "@/app/AppProviders";
 import { Toaster } from "@/components/ui/sonner";
+import type { UserProviderState } from "@/shared/contexts/user";
+
+type RouterContext = Omit<UserProviderState, "setUser">;
 
 const RootLayout = () => (
   <>
-    <AppProviders>
-      <Outlet />
-      <Toaster
-        position="top-right"
-        richColors
-      />
-      <TanStackRouterDevtools />
-    </AppProviders>
+    <Outlet />
+    <Toaster
+      position="top-right"
+      richColors
+    />
+    <TanStackRouterDevtools />
   </>
 );
 
-export const Route = createRootRoute({ component: RootLayout });
+export const Route = createRootRouteWithContext<RouterContext>()({ component: RootLayout });

@@ -32,7 +32,7 @@ export function useSignUp() {
   const { Field, handleSubmit, Subscribe } = useForm({
     defaultValues: defaultSignUpUser,
     onSubmit: async ({ value }) => {
-      createUserMutation.mutate({
+      return createUserMutation.mutateAsync({
         body: {
           email: value.email,
           username: value.username,
