@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { localStorageWrite, localStorageRead, localStorageRemove } from "@/shared/lib";
+import { localStorageWrite, localStorageRead, localStorageRemove } from "@/shared/lib/localStorage";
 import { AuthContext } from "..";
 import { SESSION_ID_STORAGE_KEY, ACCESS_TOKEN_STORAGE_KEY } from "@/shared/constants";
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { THEME_STORAGE_KEY } from "@/shared/constants";
 import { ThemeContext } from "@shared/contexts";
-import { localStorageRead, localStorageWrite } from "@/shared/lib";
+import { localStorageRead, localStorageWrite } from "@/shared/lib/localStorage";
 import type { Theme } from ".";
 
 type ThemeProviderProps = {
