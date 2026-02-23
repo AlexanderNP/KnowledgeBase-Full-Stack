@@ -69,7 +69,10 @@ export class Article extends ArticleBase {
   @ApiProperty()
   comments: {
     id: string;
-    userId: string;
+    author: {
+      id: string;
+      username: string;
+    };
     content: string;
   }[];
 }

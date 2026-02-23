@@ -19,7 +19,7 @@ export class UpdateCommentDto extends PartialType(CreateCommentDto) {
     required: false,
   })
   @IsMongoId()
-  userId?: string;
+  authorId?: string;
 
   @ApiPropertyOptional({
     type: 'string',

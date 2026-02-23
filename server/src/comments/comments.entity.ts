@@ -14,7 +14,7 @@ export class Comment {
   content: string;
 
   @ApiProperty()
-  userId: string;
+  authorId: string;
 
   @ApiProperty()
   articleId: string;

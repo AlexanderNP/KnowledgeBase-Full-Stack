@@ -10,7 +10,7 @@ export class UserController {
 
   @AuthWithoutRoles()
   @Get(':id')
-  async getCategoryById(@Param('id', ValidationMongoIdPipe) id: string): Promise<User> {
+  async getUserById(@Param('id', ValidationMongoIdPipe) id: string): Promise<User> {
     return this.userService.getUser(
       {
         id,

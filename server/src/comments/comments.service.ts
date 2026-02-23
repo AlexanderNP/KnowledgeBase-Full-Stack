@@ -7,13 +7,18 @@ import { UpdateCommentDto } from './dto/update-comment.dto';
 export class CommentsService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create({ articleId, ...comment }: CreateCommentDto) {
+  async create({ articleId, authorId, ...comment }: CreateCommentDto) {
     return this.prismaService.comments.create({
       data: {
         ...comment,
         article: {
           connect: {
             id: articleId,
+          },
+        },
+        author: {
+          connect: {
+            id: authorId,
           },
         },
       },

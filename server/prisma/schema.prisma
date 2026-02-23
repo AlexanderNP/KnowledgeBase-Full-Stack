@@ -32,9 +32,10 @@ model Articles {
 model Comments {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   content   String
-  userId    String   @db.ObjectId
+  authorId  String @db.ObjectId
   articleId String   @db.ObjectId
   article   Articles @relation(fields: [articleId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id])
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
 }
@@ -66,6 +67,7 @@ model User {
   role             Role               @default(USER)
   favoritesArticle FavoritesArticle[]
   refreshTokens    RefreshTokens[]
+  comments         Comments[]
   createdAt        DateTime           @default(now())
   updateAt         DateTime           @updatedAt
 }

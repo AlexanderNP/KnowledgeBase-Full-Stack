@@ -19,7 +19,7 @@ export class CreateCommentDto {
   })
   @IsNotEmpty()
   @IsMongoId()
-  userId: string;
+  authorId: string;
 
   @ApiProperty({
     type: 'string',

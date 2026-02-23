@@ -35,7 +35,9 @@ export class ArticlesService {
       include: {
         mediaFiles: { select: { type: true, url: true } },
         categories: { select: { id: true, name: true } },
-        comments: { select: { id: true, userId: true, content: true } },
+        comments: {
+          select: { id: true, author: { select: { id: true, username: true } }, content: true },
+        },
       },
     });
 
@@ -48,7 +50,9 @@ export class ArticlesService {
       include: {
         mediaFiles: { select: { type: true, url: true } },
         categories: { select: { id: true, name: true } },
-        comments: { select: { id: true, userId: true, content: true } },
+        comments: {
+          select: { id: true, author: { select: { id: true, username: true } }, content: true },
+        },
       },
     });
 
