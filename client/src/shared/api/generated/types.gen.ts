@@ -172,7 +172,10 @@ export type Article = {
   mediaFiles: Array<CreateMediaFilesDto>;
   comments: Array<{
     id: string;
-    userId: string;
+    author: {
+      id?: string;
+      username?: string;
+    };
     content: string;
   }>;
 };
@@ -194,7 +197,10 @@ export type ArticleWithHeadings = {
   mediaFiles: Array<CreateMediaFilesDto>;
   comments: Array<{
     id: string;
-    userId: string;
+    author: {
+      id?: string;
+      username?: string;
+    };
     content: string;
   }>;
   headings: Array<string>;
@@ -243,7 +249,7 @@ export type CreateCommentDto = {
   /**
    * ID автора комментария (MongoDB ObjectId)
    */
-  userId: string;
+  authorId: string;
   /**
    * ID статьи (MongoDB ObjectId)
    */
@@ -255,7 +261,7 @@ export type Comment = {
   createdAt: string;
   updateAt: string;
   content: string;
-  userId: string;
+  authorId: string;
   articleId: string;
 };
 
@@ -267,7 +273,7 @@ export type UpdateCommentDto = {
   /**
    * ID автора комментария (MongoDB ObjectId)
    */
-  userId?: string;
+  authorId?: string;
   /**
    * ID статьи (MongoDB ObjectId)
    */
@@ -329,7 +335,7 @@ export type AuthControllerRefreshResponses = {
 export type AuthControllerRefreshResponse =
   AuthControllerRefreshResponses[keyof AuthControllerRefreshResponses];
 
-export type UserControllerGetCategoryByIdData = {
+export type UserControllerGetUserByIdData = {
   body?: never;
   path: {
     id: string;
@@ -338,12 +344,12 @@ export type UserControllerGetCategoryByIdData = {
   url: "/user/{id}";
 };
 
-export type UserControllerGetCategoryByIdResponses = {
+export type UserControllerGetUserByIdResponses = {
   200: User;
 };
 
-export type UserControllerGetCategoryByIdResponse =
-  UserControllerGetCategoryByIdResponses[keyof UserControllerGetCategoryByIdResponses];
+export type UserControllerGetUserByIdResponse =
+  UserControllerGetUserByIdResponses[keyof UserControllerGetUserByIdResponses];
 
 export type CategoriesControllerGetCategoriesData = {
   body?: never;

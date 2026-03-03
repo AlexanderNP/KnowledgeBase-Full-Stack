@@ -6,13 +6,13 @@ export const createCommentsSchema = z.object({
   articleId: mongoId.nonempty({
     error: "Не удалось определить статью.",
   }),
-  userId: mongoId.nonempty({
+  authorId: mongoId.nonempty({
     error: "Не удалось определить автора.",
   }),
 });
 
 export const updateCommentsSchema = z.object({
   content: z.string().trim().min(1, { message: "Комментарий не может быть пустым." }).optional(),
-  userId: mongoId.optional(),
+  authorId: mongoId.optional(),
   articleId: mongoId.optional(),
 });

@@ -5,7 +5,7 @@ import {
   authControllerSignIn,
   authControllerSignUp,
   authControllerRefresh,
-  userControllerGetCategoryById,
+  userControllerGetUserById,
   categoriesControllerGetCategories,
   categoriesControllerCreateCategory,
   categoriesControllerDeleteCategory,
@@ -35,7 +35,7 @@ import type {
   AuthControllerSignUpResponse,
   AuthControllerRefreshData,
   AuthControllerRefreshResponse,
-  UserControllerGetCategoryByIdData,
+  UserControllerGetUserByIdData,
   CategoriesControllerGetCategoriesData,
   CategoriesControllerCreateCategoryData,
   CategoriesControllerCreateCategoryResponse,
@@ -184,16 +184,16 @@ const createQueryKey = <TOptions extends Options>(
   return [params];
 };
 
-export const userControllerGetCategoryByIdQueryKey = (
-  options: Options<UserControllerGetCategoryByIdData>,
-) => createQueryKey("userControllerGetCategoryById", options);
+export const userControllerGetUserByIdQueryKey = (
+  options: Options<UserControllerGetUserByIdData>,
+) => createQueryKey("userControllerGetUserById", options);
 
-export const userControllerGetCategoryByIdOptions = (
-  options: Options<UserControllerGetCategoryByIdData>,
+export const userControllerGetUserByIdOptions = (
+  options: Options<UserControllerGetUserByIdData>,
 ) => {
   return queryOptions({
     queryFn: async ({ queryKey, signal }) => {
-      const { data } = await userControllerGetCategoryById({
+      const { data } = await userControllerGetUserById({
         ...options,
         ...queryKey[0],
         signal,
@@ -201,7 +201,7 @@ export const userControllerGetCategoryByIdOptions = (
       });
       return data;
     },
-    queryKey: userControllerGetCategoryByIdQueryKey(options),
+    queryKey: userControllerGetUserByIdQueryKey(options),
   });
 };
 

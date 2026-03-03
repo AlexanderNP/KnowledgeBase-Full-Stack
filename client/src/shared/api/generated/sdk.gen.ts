@@ -13,8 +13,8 @@ import type {
   AuthControllerSignUpResponses,
   AuthControllerRefreshData,
   AuthControllerRefreshResponses,
-  UserControllerGetCategoryByIdData,
-  UserControllerGetCategoryByIdResponses,
+  UserControllerGetUserByIdData,
+  UserControllerGetUserByIdResponses,
   CategoriesControllerGetCategoriesData,
   CategoriesControllerGetCategoriesResponses,
   CategoriesControllerCreateCategoryData,
@@ -117,14 +117,10 @@ export const authControllerRefresh = <ThrowOnError extends boolean = false>(
   });
 };
 
-export const userControllerGetCategoryById = <ThrowOnError extends boolean = false>(
-  options: Options<UserControllerGetCategoryByIdData, ThrowOnError>,
+export const userControllerGetUserById = <ThrowOnError extends boolean = false>(
+  options: Options<UserControllerGetUserByIdData, ThrowOnError>,
 ) => {
-  return (options.client ?? client).get<
-    UserControllerGetCategoryByIdResponses,
-    unknown,
-    ThrowOnError
-  >({
+  return (options.client ?? client).get<UserControllerGetUserByIdResponses, unknown, ThrowOnError>({
     security: [
       {
         scheme: "bearer",
