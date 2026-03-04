@@ -13,7 +13,6 @@ export function useUserProfile() {
       path: {
         id: sessionId!,
       },
-      auth: token!,
     }),
     enabled: !!sessionId && !!token,
   });
