@@ -5,7 +5,9 @@ import {
   authControllerSignIn,
   authControllerSignUp,
   authControllerRefresh,
+  userControllerDeleteUser,
   userControllerGetUserById,
+  userControllerUpdateUser,
   categoriesControllerGetCategories,
   categoriesControllerCreateCategory,
   categoriesControllerDeleteCategory,
@@ -16,7 +18,7 @@ import {
   articlesControllerDeleteArticle,
   articlesControllerGetArticleById,
   articlesControllerUpdateViews,
-  articlesControllerUpdateLikes,
+  articlesControllerToggleLikes,
   articlesControllerUpdateArticle,
   articlesControllerUploadFile,
   commentsControllerCreate,
@@ -35,7 +37,10 @@ import type {
   AuthControllerSignUpResponse,
   AuthControllerRefreshData,
   AuthControllerRefreshResponse,
+  UserControllerDeleteUserData,
+  UserControllerDeleteUserResponse,
   UserControllerGetUserByIdData,
+  UserControllerUpdateUserData,
   CategoriesControllerGetCategoriesData,
   CategoriesControllerCreateCategoryData,
   CategoriesControllerCreateCategoryResponse,
@@ -52,8 +57,8 @@ import type {
   ArticlesControllerGetArticleByIdData,
   ArticlesControllerUpdateViewsData,
   ArticlesControllerUpdateViewsResponse,
-  ArticlesControllerUpdateLikesData,
-  ArticlesControllerUpdateLikesResponse,
+  ArticlesControllerToggleLikesData,
+  ArticlesControllerToggleLikesResponse,
   ArticlesControllerUpdateArticleData,
   ArticlesControllerUpdateArticleResponse,
   ArticlesControllerUploadFileData,
@@ -67,7 +72,6 @@ import type {
   CommentsControllerUpdateResponse,
   FavoritesArticleControllerFindAllData,
   FavoritesArticleControllerCreateData,
-  FavoritesArticleControllerCreateResponse,
   FavoritesArticleControllerDeleteData,
   FavoritesArticleControllerDeleteResponse,
 } from "../types.gen";
@@ -145,6 +149,30 @@ export const authControllerRefreshMutation = (
   return mutationOptions;
 };
 
+export const userControllerDeleteUserMutation = (
+  options?: Partial<Options<UserControllerDeleteUserData>>,
+): UseMutationOptions<
+  UserControllerDeleteUserResponse,
+  DefaultError,
+  Options<UserControllerDeleteUserData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    UserControllerDeleteUserResponse,
+    DefaultError,
+    Options<UserControllerDeleteUserData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await userControllerDeleteUser({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
 export type QueryKey<TOptions extends Options> = [
   Pick<TOptions, "baseUrl" | "body" | "headers" | "path" | "query"> & {
     _id: string;
@@ -203,6 +231,26 @@ export const userControllerGetUserByIdOptions = (
     },
     queryKey: userControllerGetUserByIdQueryKey(options),
   });
+};
+
+export const userControllerUpdateUserMutation = (
+  options?: Partial<Options<UserControllerUpdateUserData>>,
+): UseMutationOptions<unknown, DefaultError, Options<UserControllerUpdateUserData>> => {
+  const mutationOptions: UseMutationOptions<
+    unknown,
+    DefaultError,
+    Options<UserControllerUpdateUserData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await userControllerUpdateUser({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
 };
 
 export const categoriesControllerGetCategoriesQueryKey = (
@@ -433,20 +481,20 @@ export const articlesControllerUpdateViewsMutation = (
   return mutationOptions;
 };
 
-export const articlesControllerUpdateLikesMutation = (
-  options?: Partial<Options<ArticlesControllerUpdateLikesData>>,
+export const articlesControllerToggleLikesMutation = (
+  options?: Partial<Options<ArticlesControllerToggleLikesData>>,
 ): UseMutationOptions<
-  ArticlesControllerUpdateLikesResponse,
+  ArticlesControllerToggleLikesResponse,
   DefaultError,
-  Options<ArticlesControllerUpdateLikesData>
+  Options<ArticlesControllerToggleLikesData>
 > => {
   const mutationOptions: UseMutationOptions<
-    ArticlesControllerUpdateLikesResponse,
+    ArticlesControllerToggleLikesResponse,
     DefaultError,
-    Options<ArticlesControllerUpdateLikesData>
+    Options<ArticlesControllerToggleLikesData>
   > = {
     mutationFn: async (fnOptions) => {
-      const { data } = await articlesControllerUpdateLikes({
+      const { data } = await articlesControllerToggleLikes({
         ...options,
         ...fnOptions,
         throwOnError: true,
@@ -621,13 +669,9 @@ export const favoritesArticleControllerFindAllOptions = (
 
 export const favoritesArticleControllerCreateMutation = (
   options?: Partial<Options<FavoritesArticleControllerCreateData>>,
-): UseMutationOptions<
-  FavoritesArticleControllerCreateResponse,
-  DefaultError,
-  Options<FavoritesArticleControllerCreateData>
-> => {
+): UseMutationOptions<unknown, DefaultError, Options<FavoritesArticleControllerCreateData>> => {
   const mutationOptions: UseMutationOptions<
-    FavoritesArticleControllerCreateResponse,
+    unknown,
     DefaultError,
     Options<FavoritesArticleControllerCreateData>
   > = {

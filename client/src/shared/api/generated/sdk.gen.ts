@@ -13,8 +13,12 @@ import type {
   AuthControllerSignUpResponses,
   AuthControllerRefreshData,
   AuthControllerRefreshResponses,
+  UserControllerDeleteUserData,
+  UserControllerDeleteUserResponses,
   UserControllerGetUserByIdData,
   UserControllerGetUserByIdResponses,
+  UserControllerUpdateUserData,
+  UserControllerUpdateUserResponses,
   CategoriesControllerGetCategoriesData,
   CategoriesControllerGetCategoriesResponses,
   CategoriesControllerCreateCategoryData,
@@ -35,8 +39,8 @@ import type {
   ArticlesControllerGetArticleByIdResponses,
   ArticlesControllerUpdateViewsData,
   ArticlesControllerUpdateViewsResponses,
-  ArticlesControllerUpdateLikesData,
-  ArticlesControllerUpdateLikesResponses,
+  ArticlesControllerToggleLikesData,
+  ArticlesControllerToggleLikesResponses,
   ArticlesControllerUpdateArticleData,
   ArticlesControllerUpdateArticleResponses,
   ArticlesControllerUploadFileData,
@@ -117,6 +121,25 @@ export const authControllerRefresh = <ThrowOnError extends boolean = false>(
   });
 };
 
+export const userControllerDeleteUser = <ThrowOnError extends boolean = false>(
+  options: Options<UserControllerDeleteUserData, ThrowOnError>,
+) => {
+  return (options.client ?? client).delete<
+    UserControllerDeleteUserResponses,
+    unknown,
+    ThrowOnError
+  >({
+    security: [
+      {
+        scheme: "bearer",
+        type: "http",
+      },
+    ],
+    url: "/user/{id}",
+    ...options,
+  });
+};
+
 export const userControllerGetUserById = <ThrowOnError extends boolean = false>(
   options: Options<UserControllerGetUserByIdData, ThrowOnError>,
 ) => {
@@ -129,6 +152,26 @@ export const userControllerGetUserById = <ThrowOnError extends boolean = false>(
     ],
     url: "/user/{id}",
     ...options,
+  });
+};
+
+export const userControllerUpdateUser = <ThrowOnError extends boolean = false>(
+  options: Options<UserControllerUpdateUserData, ThrowOnError>,
+) => {
+  return (options.client ?? client).put<UserControllerUpdateUserResponses, unknown, ThrowOnError>({
+    ...formDataBodySerializer,
+    security: [
+      {
+        scheme: "bearer",
+        type: "http",
+      },
+    ],
+    url: "/user/update/{id}",
+    ...options,
+    headers: {
+      "Content-Type": null,
+      ...options.headers,
+    },
   });
 };
 
@@ -295,16 +338,16 @@ export const articlesControllerUpdateViews = <ThrowOnError extends boolean = fal
     unknown,
     ThrowOnError
   >({
-    url: "/articles/views/{id}",
+    url: "/articles/{id}/view",
     ...options,
   });
 };
 
-export const articlesControllerUpdateLikes = <ThrowOnError extends boolean = false>(
-  options: Options<ArticlesControllerUpdateLikesData, ThrowOnError>,
+export const articlesControllerToggleLikes = <ThrowOnError extends boolean = false>(
+  options: Options<ArticlesControllerToggleLikesData, ThrowOnError>,
 ) => {
   return (options.client ?? client).put<
-    ArticlesControllerUpdateLikesResponses,
+    ArticlesControllerToggleLikesResponses,
     unknown,
     ThrowOnError
   >({
@@ -314,8 +357,12 @@ export const articlesControllerUpdateLikes = <ThrowOnError extends boolean = fal
         type: "http",
       },
     ],
-    url: "/articles/likes/{id}",
+    url: "/articles/{id}/like",
     ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
   });
 };
 

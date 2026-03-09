@@ -43,7 +43,10 @@ export type Tokens = {
 
 export type FavoritesArticle = {
   id: string;
-  articleId: string;
+  article: {
+    id: string;
+    title: string;
+  };
   userId: string;
   savedAt: string;
 };
@@ -55,7 +58,27 @@ export type User = {
   role: Role;
   id: string;
   email: string;
+  avatar: string | null;
   username: string;
+};
+
+export type UpdateUserDto = {
+  /**
+   * Имя пользователя
+   */
+  username?: string;
+  /**
+   * Email пользователя
+   */
+  email?: string;
+  /**
+   * Пароль пользователя
+   */
+  password?: string;
+  /**
+   * Аватар пользователя
+   */
+  avatar?: Blob | File;
 };
 
 export type CreateCategoryDto = {
@@ -138,7 +161,10 @@ export type ArticleCreate = {
   content: string;
   viewCount: number;
   likesCount: number;
-  authorId: string;
+  author: {
+    id: string;
+    username: string;
+  };
   createdAt: string;
   updateAt: string;
   categoryIds: Array<string>;
@@ -161,7 +187,10 @@ export type Article = {
   content: string;
   viewCount: number;
   likesCount: number;
-  authorId: string;
+  author: {
+    id: string;
+    username: string;
+  };
   createdAt: string;
   updateAt: string;
   categoryIds: Array<string>;
@@ -177,6 +206,8 @@ export type Article = {
       username?: string;
     };
     content: string;
+    createdAt: string;
+    updateAt: string;
   }>;
 };
 
@@ -186,7 +217,10 @@ export type ArticleWithHeadings = {
   content: string;
   viewCount: number;
   likesCount: number;
-  authorId: string;
+  author: {
+    id: string;
+    username: string;
+  };
   createdAt: string;
   updateAt: string;
   categoryIds: Array<string>;
@@ -202,6 +236,8 @@ export type ArticleWithHeadings = {
       username?: string;
     };
     content: string;
+    createdAt: string;
+    updateAt: string;
   }>;
   headings: Array<string>;
 };
@@ -212,10 +248,20 @@ export type ArticleUpdate = {
   content: string;
   viewCount: number;
   likesCount: number;
-  authorId: string;
+  author: {
+    id: string;
+    username: string;
+  };
   createdAt: string;
   updateAt: string;
   categoryIds: Array<string>;
+};
+
+export type ToggleLikeDto = {
+  /**
+   * ID пользователя, который ставит/убирает лайк
+   */
+  userId: string;
 };
 
 export type UpdateArticleDto = {
@@ -231,10 +277,6 @@ export type UpdateArticleDto = {
    * Массив ID категорий (MongoDB ObjectId)
    */
   categoryIds?: Array<string>;
-};
-
-export type ArticleDeleted = {
-  id: string;
 };
 
 export type FileUploadDto = {
@@ -335,6 +377,22 @@ export type AuthControllerRefreshResponses = {
 export type AuthControllerRefreshResponse =
   AuthControllerRefreshResponses[keyof AuthControllerRefreshResponses];
 
+export type UserControllerDeleteUserData = {
+  body?: never;
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: "/user/{id}";
+};
+
+export type UserControllerDeleteUserResponses = {
+  204: void;
+};
+
+export type UserControllerDeleteUserResponse =
+  UserControllerDeleteUserResponses[keyof UserControllerDeleteUserResponses];
+
 export type UserControllerGetUserByIdData = {
   body?: never;
   path: {
@@ -350,6 +408,19 @@ export type UserControllerGetUserByIdResponses = {
 
 export type UserControllerGetUserByIdResponse =
   UserControllerGetUserByIdResponses[keyof UserControllerGetUserByIdResponses];
+
+export type UserControllerUpdateUserData = {
+  body: UpdateUserDto;
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: "/user/update/{id}";
+};
+
+export type UserControllerUpdateUserResponses = {
+  200: unknown;
+};
 
 export type CategoriesControllerGetCategoriesData = {
   body?: never;
@@ -389,7 +460,7 @@ export type CategoriesControllerDeleteCategoryData = {
 };
 
 export type CategoriesControllerDeleteCategoryResponses = {
-  200: Category;
+  204: void;
 };
 
 export type CategoriesControllerDeleteCategoryResponse =
@@ -465,7 +536,7 @@ export type ArticlesControllerDeleteArticleData = {
 };
 
 export type ArticlesControllerDeleteArticleResponses = {
-  200: ArticleDeleted;
+  204: void;
 };
 
 export type ArticlesControllerDeleteArticleResponse =
@@ -493,7 +564,7 @@ export type ArticlesControllerUpdateViewsData = {
     id: string;
   };
   query?: never;
-  url: "/articles/views/{id}";
+  url: "/articles/{id}/view";
 };
 
 export type ArticlesControllerUpdateViewsResponses = {
@@ -503,21 +574,21 @@ export type ArticlesControllerUpdateViewsResponses = {
 export type ArticlesControllerUpdateViewsResponse =
   ArticlesControllerUpdateViewsResponses[keyof ArticlesControllerUpdateViewsResponses];
 
-export type ArticlesControllerUpdateLikesData = {
-  body?: never;
+export type ArticlesControllerToggleLikesData = {
+  body: ToggleLikeDto;
   path: {
     id: string;
   };
   query?: never;
-  url: "/articles/likes/{id}";
+  url: "/articles/{id}/like";
 };
 
-export type ArticlesControllerUpdateLikesResponses = {
-  200: ArticleUpdate;
+export type ArticlesControllerToggleLikesResponses = {
+  204: void;
 };
 
-export type ArticlesControllerUpdateLikesResponse =
-  ArticlesControllerUpdateLikesResponses[keyof ArticlesControllerUpdateLikesResponses];
+export type ArticlesControllerToggleLikesResponse =
+  ArticlesControllerToggleLikesResponses[keyof ArticlesControllerToggleLikesResponses];
 
 export type ArticlesControllerUpdateArticleData = {
   body: UpdateArticleDto;
@@ -576,7 +647,7 @@ export type CommentsControllerDeleteData = {
 };
 
 export type CommentsControllerDeleteResponses = {
-  200: Comment;
+  204: void;
 };
 
 export type CommentsControllerDeleteResponse =
@@ -638,11 +709,8 @@ export type FavoritesArticleControllerCreateData = {
 };
 
 export type FavoritesArticleControllerCreateResponses = {
-  201: FavoritesArticle;
+  201: unknown;
 };
-
-export type FavoritesArticleControllerCreateResponse =
-  FavoritesArticleControllerCreateResponses[keyof FavoritesArticleControllerCreateResponses];
 
 export type FavoritesArticleControllerDeleteData = {
   body?: never;
@@ -654,7 +722,7 @@ export type FavoritesArticleControllerDeleteData = {
 };
 
 export type FavoritesArticleControllerDeleteResponses = {
-  200: FavoritesArticle;
+  204: void;
 };
 
 export type FavoritesArticleControllerDeleteResponse =
