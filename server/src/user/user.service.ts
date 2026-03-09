@@ -58,6 +58,11 @@ export class UserService {
             savedAt: true,
           },
         },
+        articleLikes: {
+          select: {
+            articleId: true,
+          },
+        },
         role: true,
       },
     });
