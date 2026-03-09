@@ -50,9 +50,6 @@ export class UserService {
         email: true,
         username: true,
         avatar: true,
-        role: true,
-      },
-      include: {
         favoritesArticle: {
           select: {
             id: true,
@@ -61,6 +58,7 @@ export class UserService {
             savedAt: true,
           },
         },
+        role: true,
       },
     });
 
@@ -92,7 +90,7 @@ export class UserService {
     const { avatar } = findUser;
 
     if (avatar) {
-      await this.minioService.deleteFile(avatar as string);
+      await this.minioService.deleteFile(avatar);
     }
 
     const deleteComments = this.prismaService.comments.deleteMany({
