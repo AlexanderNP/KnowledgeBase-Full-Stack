@@ -9,6 +9,7 @@ import {
   Query,
   Put,
   Delete,
+  HttpCode,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto, UpdateCategoryDto } from './dto';
@@ -58,8 +59,9 @@ export class CategoriesController {
   }
 
   @Auth(Role.ADMIN)
+  @HttpCode(204)
   @Delete(':id')
-  async deleteCategory(@Param('id', ValidationMongoIdPipe) id: string): Promise<Category> {
+  async deleteCategory(@Param('id', ValidationMongoIdPipe) id: string) {
     return this.categoriesService.deleteCategory({ id });
   }
 }

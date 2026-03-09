@@ -22,9 +22,12 @@ model Articles {
   likesCount  Int          @default(0)
   authorId    String       @db.ObjectId
   categoryIds String[]     @db.ObjectId
+  author      User         @relation(fields: [authorId], references: [id])
   categories  Categories[] @relation(fields: [categoryIds], references: [id])
+  favorites   FavoritesArticle[]
   comments    Comments[]
   mediaFiles  MediaFiles[]
+  articleLikes ArticleLike[]
   createdAt   DateTime     @default(now())
   updateAt    DateTime     @updatedAt
 }
@@ -62,12 +65,15 @@ model Categories {
 model User {
   id               String             @id @default(auto()) @map("_id") @db.ObjectId
   username         String
+  avatar           String?
   email            String             @unique
   password         String
   role             Role               @default(USER)
   favoritesArticle FavoritesArticle[]
   refreshTokens    RefreshTokens[]
   comments         Comments[]
+  articles         Articles[]
+  articleLikes     ArticleLike[]
   createdAt        DateTime           @default(now())
   updateAt         DateTime           @updatedAt
 }
@@ -85,8 +91,20 @@ model FavoritesArticle {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   articleId String   @db.ObjectId
   userId    String   @db.ObjectId
+  article   Articles @relation(fields: [articleId], references: [id])
   user      User     @relation(fields: [userId], references: [id])
   savedAt   DateTime @default(now())
+  @@unique([userId, articleId])
+}
+
+model ArticleLike {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  articleId String   @db.ObjectId
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  article   Articles @relation(fields: [articleId], references: [id])
+  @@unique([userId, articleId])
 }
 
 enum Role {

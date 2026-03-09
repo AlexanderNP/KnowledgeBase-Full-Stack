@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, HttpCode } from '@nestjs/common';
 import { Comment } from './comments.entity';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
@@ -31,8 +31,9 @@ export class CommentsController {
   }
 
   @AuthWithoutRoles()
+  @HttpCode(204)
   @Delete(':id')
-  async delete(@Param('id', ValidationMongoIdPipe) id: string): Promise<Comment> {
+  async delete(@Param('id', ValidationMongoIdPipe) id: string) {
     return await this.commentsService.delete(id);
   }
 }

@@ -1,12 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from 'generated/prisma';
-import {
-  ArticleCreate,
-  ArticleDeleted,
-  Article,
-  ArticleWithHeadings,
-  ArticleUpdate,
-} from './articles.entity';
+import { ArticleCreate, Article, ArticleWithHeadings, ArticleUpdate } from './articles.entity';
 import { MinioService } from 'src/minio/minio.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateArticleDto, UpdateArticleDto } from './dto';
@@ -36,7 +30,16 @@ export class ArticlesService {
         mediaFiles: { select: { type: true, url: true } },
         categories: { select: { id: true, name: true } },
         comments: {
-          select: { id: true, author: { select: { id: true, username: true } }, content: true },
+          select: {
+            id: true,
+            author: { select: { id: true, username: true } },
+            content: true,
+            createdAt: true,
+            updateAt: true,
+          },
+        },
+        author: {
+          select: { id: true, username: true },
         },
       },
     });
@@ -51,7 +54,16 @@ export class ArticlesService {
         mediaFiles: { select: { type: true, url: true } },
         categories: { select: { id: true, name: true } },
         comments: {
-          select: { id: true, author: { select: { id: true, username: true } }, content: true },
+          select: {
+            id: true,
+            author: { select: { id: true, username: true } },
+            content: true,
+            createdAt: true,
+            updateAt: true,
+          },
+        },
+        author: {
+          select: { id: true, username: true },
         },
       },
     });
@@ -80,6 +92,11 @@ export class ArticlesService {
           create: mediaFiles,
         },
       },
+      include: {
+        author: {
+          select: { id: true, username: true },
+        },
+      },
     });
 
     return article;
@@ -90,7 +107,9 @@ export class ArticlesService {
     const mediaFiles = getMeadiaFilesFromMarkdown(articleUpdateData.content);
 
     if (mediaFiles.length) {
-      await this.deleteMediaFiles(id);
+      await this.prismaService.mediaFiles.deleteMany({
+        where: { articleId: id },
+      });
     }
 
     const data: Prisma.ArticlesUpdateInput = {
@@ -110,6 +129,11 @@ export class ArticlesService {
     const article: ArticleUpdate = await this.prismaService.articles.update({
       where: { id },
       data,
+      include: {
+        author: {
+          select: { id: true, username: true },
+        },
+      },
     });
 
     return article;
@@ -118,16 +142,33 @@ export class ArticlesService {
   async deleteArticle(where: Prisma.ArticlesWhereUniqueInput) {
     const { id, mediaFiles } = await this.getArticle(where);
 
-    if (mediaFiles.length) {
-      await this.deleteMediaFiles(id);
-    }
+    const deleteComments = this.prismaService.comments.deleteMany({
+      where: { articleId: id },
+    });
 
-    const deletedArticle: ArticleDeleted = await this.prismaService.articles.delete({
+    const deleteFavorites = this.prismaService.favoritesArticle.deleteMany({
+      where: { articleId: id },
+    });
+
+    const deleteMediaFiles = this.prismaService.mediaFiles.deleteMany({
+      where: { articleId: id },
+    });
+
+    const deleteArticle = this.prismaService.articles.delete({
       where: { id },
       select: { id: true },
     });
 
-    return deletedArticle;
+    await this.prismaService.$transaction([
+      deleteComments,
+      deleteFavorites,
+      deleteMediaFiles,
+      deleteArticle,
+    ]);
+
+    const filesToDelete = mediaFiles.map((item) => item.url);
+
+    await this.minioService.deleteFiles(filesToDelete);
   }
 
   async updateViews(id: string) {
@@ -142,42 +183,71 @@ export class ArticlesService {
           increment: 1,
         },
       },
+      include: {
+        author: {
+          select: { id: true, username: true },
+        },
+      },
     });
 
     return article;
   }
 
-  async updateLikes(id: string, like: boolean) {
+  async toggleLikes(id: string, userId: string) {
     await this.getArticle({ id });
 
-    const article: ArticleUpdate = await this.prismaService.articles.update({
+    const findLikedArticle = await this.prismaService.articleLike.findUnique({
+      where: { userId_articleId: { userId, articleId: id } },
+    });
+
+    if (findLikedArticle) {
+      await this.unlike(id, userId);
+      return;
+    }
+
+    await this.like(id, userId);
+  }
+
+  private async like(id: string, userId: string) {
+    const createLike = this.prismaService.articleLike.create({
+      data: { userId, articleId: id },
+    });
+
+    const incrementLikes = this.prismaService.articles.update({
       where: {
         id,
       },
       data: {
-        viewCount: like
-          ? {
-              increment: 1,
-            }
-          : {
-              decrement: 1,
-            },
+        likesCount: {
+          increment: 1,
+        },
       },
     });
 
-    return article;
+    await this.prismaService.$transaction([createLike, incrementLikes]);
+  }
+
+  private async unlike(id: string, userId: string) {
+    const deleteLike = this.prismaService.articleLike.delete({
+      where: { userId_articleId: { userId, articleId: id } },
+    });
+
+    const decrementLikes = this.prismaService.articles.update({
+      where: {
+        id,
+      },
+      data: {
+        likesCount: {
+          decrement: 1,
+        },
+      },
+    });
+
+    await this.prismaService.$transaction([deleteLike, decrementLikes]);
   }
 
   async createFile(file: Express.Multer.File): Promise<string> {
     const fileName = await this.minioService.uploadFile(file);
     return this.minioService.getFileUrl(fileName);
-  }
-
-  private async deleteMediaFiles(articleId: string): Promise<void> {
-    await this.prismaService.mediaFiles.deleteMany({
-      where: {
-        articleId,
-      },
-    });
   }
 }

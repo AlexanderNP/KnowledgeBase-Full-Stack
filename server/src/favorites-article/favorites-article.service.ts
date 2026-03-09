@@ -11,11 +11,7 @@ export class FavoritesArticleService {
     return this.prismaService.favoritesArticle.create({
       data: {
         articleId,
-        user: {
-          connect: {
-            id: userId,
-          },
-        },
+        userId,
       },
     });
   }
@@ -40,15 +36,21 @@ export class FavoritesArticleService {
     where?: Prisma.FavoritesArticleWhereInput;
     include?: Prisma.FavoritesArticleInclude;
   }) {
-    return this.prismaService.favoritesArticle.findMany({
+    return await this.prismaService.favoritesArticle.findMany({
       ...params,
+      include: {
+        article: { select: { id: true, title: true } },
+      },
+      omit: {
+        articleId: true,
+      },
     });
   }
 
   async delete(id: string) {
     const findFavoriteArticle = await this.findOne(id);
 
-    return this.prismaService.favoritesArticle.delete({
+    await this.prismaService.favoritesArticle.delete({
       where: {
         id: findFavoriteArticle.id,
       },

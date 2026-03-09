@@ -9,9 +9,10 @@ import {
   Get,
   Query,
   Delete,
+  HttpCode,
 } from '@nestjs/common';
 import { ArticlesService } from './articles.service';
-import { CreateArticleDto, UpdateArticleDto, FileUploadDto } from './dto';
+import { CreateArticleDto, UpdateArticleDto, FileUploadDto, ToggleLikeDto } from './dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ValidationMongoIdPipe } from 'src/common/pipes/validation.mongoId.pipe';
 import { AuthWithoutRoles } from 'src/auth/decorators';
@@ -44,15 +45,19 @@ export class ArticlesController {
     return await this.articlesService.getArticle({ id });
   }
 
-  @Put('views/:id')
+  @Put(':id/view')
   async updateViews(@Param('id', ValidationMongoIdPipe) id: string) {
     return await this.articlesService.updateViews(id);
   }
 
   @AuthWithoutRoles()
-  @Put('likes/:id')
-  async updateLikes(@Param('id', ValidationMongoIdPipe) id: string, like: boolean) {
-    return await this.articlesService.updateLikes(id, like);
+  @HttpCode(204)
+  @Put(':id/like')
+  async toggleLikes(
+    @Param('id', ValidationMongoIdPipe) id: string,
+    @Body() payload: ToggleLikeDto,
+  ) {
+    return await this.articlesService.toggleLikes(id, payload.userId);
   }
 
   @AuthWithoutRoles()
@@ -65,6 +70,7 @@ export class ArticlesController {
   }
 
   @AuthWithoutRoles()
+  @HttpCode(204)
   @Delete(':id')
   async deleteArticle(@Param('id', ValidationMongoIdPipe) id: string) {
     return this.articlesService.deleteArticle({ id });

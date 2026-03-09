@@ -53,7 +53,7 @@ export class CommentsService {
   async delete(id: string) {
     const findComment = await this.findOne(id);
 
-    return this.prismaService.comments.delete({
+    await this.prismaService.comments.delete({
       where: {
         id: findComment.id,
       },

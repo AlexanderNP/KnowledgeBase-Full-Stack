@@ -30,7 +30,7 @@ export class AuthService {
 
   async refreshTokens(refreshToken: string) {
     const payload = await this.jwtService.verifyAsync(refreshToken);
-    const user = await this.usersService.getUser({ id: payload.sub });
+    const user = await this.usersService.getUserById(payload.sub as string);
     const newPayload = { sub: user.id, username: user.username };
     const tokens = await this.generateTokens(newPayload);
     await this.saveToken(user.id, tokens.refreshToken);

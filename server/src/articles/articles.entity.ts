@@ -39,7 +39,10 @@ class ArticleBase {
   likesCount: number;
 
   @ApiProperty()
-  authorId: string;
+  author: {
+    id: string;
+    username: string;
+  };
 
   @ApiProperty()
   createdAt: Date;
@@ -74,6 +77,8 @@ export class Article extends ArticleBase {
       username: string;
     };
     content: string;
+    createdAt: Date;
+    updateAt: Date;
   }[];
 }
 

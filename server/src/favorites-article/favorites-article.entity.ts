@@ -1,7 +1,10 @@
 export class FavoritesArticle {
   id: string;
 
-  articleId: string;
+  article: {
+    id: string;
+    title: string;
+  };
 
   userId: string;
 

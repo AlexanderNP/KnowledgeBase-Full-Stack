@@ -26,7 +26,7 @@ export class RolesGuard implements CanActivate {
 
     if (request.cookies?.refreshToken) {
       const { sub } = this.jwtService.decode<IJWTPayload>(request.cookies.refreshToken as string);
-      const findUser = await this.userService.getUser({ id: sub });
+      const findUser = await this.userService.getUserById(sub);
 
       if (findUser.role === Role.ADMIN) {
         return true;

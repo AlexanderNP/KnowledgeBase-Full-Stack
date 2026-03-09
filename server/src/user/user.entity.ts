@@ -1,19 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Role } from 'generated/prisma';
-
-class FavoritesArticle {
-  id: string;
-
-  articleId: string;
-
-  userId: string;
-
-  savedAt: Date;
-}
+import { FavoritesArticle } from 'src/favorites-article/favorites-article.entity';
 
 export class User {
   id: string;
   email: string;
+  avatar: string | null;
   username: string;
 
   @ApiProperty({ type: [FavoritesArticle], required: false })

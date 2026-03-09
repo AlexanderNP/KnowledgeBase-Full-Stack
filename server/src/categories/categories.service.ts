@@ -117,7 +117,7 @@ export class CategoriesService {
     });
   }
 
-  async deleteCategory(where: Prisma.CategoriesWhereUniqueInput): Promise<Category> {
+  async deleteCategory(where: Prisma.CategoriesWhereUniqueInput) {
     const findCategory = await this.getCategory(where);
     const { imageUrl } = findCategory;
 
@@ -125,7 +125,7 @@ export class CategoriesService {
       await this.minioService.deleteFile(imageUrl);
     }
 
-    return await this.prismaService.categories.delete({
+    await this.prismaService.categories.delete({
       where,
     });
   }

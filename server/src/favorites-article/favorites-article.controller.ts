@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Query, HttpCode } from '@nestjs/common';
 import { FavoritesArticleService } from './favorites-article.service';
 import { FavoritesArticle } from './favorites-article.entity';
 import { CreateFavoritesArticleDto } from './dto/create-favorites-article.dto';
@@ -11,9 +11,7 @@ export class FavoritesArticleController {
 
   @AuthWithoutRoles()
   @Post()
-  async create(
-    @Body() createFavoritesArticleDto: CreateFavoritesArticleDto,
-  ): Promise<FavoritesArticle> {
+  async create(@Body() createFavoritesArticleDto: CreateFavoritesArticleDto) {
     return await this.favoritesArticleService.create(createFavoritesArticleDto);
   }
 
@@ -30,8 +28,9 @@ export class FavoritesArticleController {
   }
 
   @AuthWithoutRoles()
+  @HttpCode(204)
   @Delete(':id')
-  async delete(@Param('id', ValidationMongoIdPipe) id: string): Promise<FavoritesArticle> {
+  async delete(@Param('id', ValidationMongoIdPipe) id: string) {
     return await this.favoritesArticleService.delete(id);
   }
 }
