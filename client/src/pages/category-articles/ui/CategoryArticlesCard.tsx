@@ -30,7 +30,7 @@ export function CategoryArticlesCard(
           </Link>
         </CardTitle>
         <CardDescription className="flex items-center gap-7">
-          <p>{article.createdAt}</p>
+          <p>Создано: {article.createdAt}</p>
           <div className="flex items-center gap-1.5">
             <Heart />
             <p>{article.likesCount}</p>

@@ -18,11 +18,7 @@ export const ArticlePreview = ({ id }: { id: string }) => {
 
   const { user } = useUserContext();
 
-  const isAuthor = user?.id === data?.authorId;
-
-  //TODO
-  // Добавить логику добавления статьи в избранное
-  // Добавить логику отображение/добавления количества просмотров
+  const isAuthor = user?.id === data?.author.id;
 
   if (status === "pending") {
     return <div>Loading...</div>;
@@ -40,6 +36,7 @@ export const ArticlePreview = ({ id }: { id: string }) => {
     <div className="relative flex max-w-6xl flex-col gap-4 pb-6">
       <div className="flex justify-between border-b-2 pb-2">
         <ArticlePreviewMeta
+          articleId={data.id}
           title={data.title}
           likesCount={data.likesCount}
           viewCount={data.viewCount}

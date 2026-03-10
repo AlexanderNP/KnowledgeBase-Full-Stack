@@ -8,7 +8,7 @@ import { useUpdateComment } from "@/entities/comment/model/useUpdateComment";
 import { useCommentActionMode } from "@/entities/comment/model/useCommentActionMode";
 import type { Article } from "@/shared/api/generated/types.gen";
 
-type CommentPreviewProps = Article["comments"][0] & {
+type CommentPreviewProps = Omit<Article["comments"][0], "updateAt"> & {
   articleId: string;
   className?: string;
 };
@@ -19,6 +19,7 @@ export const CommentPreview = ({
   content,
   articleId,
   className,
+  createdAt,
 }: CommentPreviewProps) => {
   const { user } = useUserContext();
 
@@ -50,6 +51,7 @@ export const CommentPreview = ({
         <CommentView
           className={mode === "optimistic" ? "opacity-25" : undefined}
           author={author.username ?? ""}
+          createdAt={createdAt}
           content={displayedContent}
         />
       )}

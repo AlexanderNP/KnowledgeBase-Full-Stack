@@ -51,10 +51,15 @@ export type FavoritesArticle = {
   savedAt: string;
 };
 
+export type ArticleLike = {
+  articleId: string;
+};
+
 export type Role = "USER" | "ADMIN";
 
 export type User = {
   favoritesArticle?: Array<FavoritesArticle>;
+  articleLikes?: Array<ArticleLike>;
   role: Role;
   id: string;
   email: string;

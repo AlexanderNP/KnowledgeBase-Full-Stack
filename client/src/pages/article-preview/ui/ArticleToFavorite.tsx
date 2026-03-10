@@ -14,7 +14,7 @@ interface Props {
 export const ArticleToFavorite = ({ articleTitle, articleId }: Props) => {
   const { user } = useUserContext();
 
-  const findFavoriteArticle = user?.favoritesArticle?.find((item) => item.articleId === articleId);
+  const findFavoriteArticle = user?.favoritesArticle?.find((item) => item.article.id === articleId);
 
   const { mutate: addToFavorite, isPending: isPendingAdd } = useArticleToFavorite({
     articleTitle,

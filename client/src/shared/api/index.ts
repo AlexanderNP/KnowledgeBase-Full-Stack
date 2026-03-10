@@ -19,8 +19,7 @@ export const apiClient = () => {
     return req;
   });
 
-  // Баг, в запросе на /auth отправляет в куках refreshToken. Его нужно игнорировать.
-
+  // TODO: Добавить автоматический перезапрос упавшего запроса с новым токеном
   client.interceptors.response.use(async (res, req, options) => {
     if (res.status !== 401) return res;
 
