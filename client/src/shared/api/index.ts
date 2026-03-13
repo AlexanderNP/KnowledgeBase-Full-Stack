@@ -37,6 +37,18 @@ export const apiClient = () => {
     }
 
     localStorageWrite(ACCESS_TOKEN_STORAGE_KEY, data.accessToken);
+
+    await fetch(req.url, {
+      credentials: "include",
+      body: JSON.stringify(options.body),
+      method: req.method,
+      headers: {
+        ...req.headers,
+        Authorization: `Bearer ${data.accessToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+
     return res.headers.set("Authorization", `Bearer ${data.accessToken}`);
   });
 
