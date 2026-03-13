@@ -19,7 +19,6 @@ export const apiClient = () => {
     return req;
   });
 
-  // TODO: Добавить автоматический перезапрос упавшего запроса с новым токеном
   client.interceptors.response.use(async (res, req, options) => {
     if (res.status !== 401) return res;
 
@@ -40,7 +39,7 @@ export const apiClient = () => {
 
     await fetch(req.url, {
       credentials: "include",
-      body: JSON.stringify(options.body),
+      body: options.serializedBody,
       method: req.method,
       headers: {
         ...req.headers,
