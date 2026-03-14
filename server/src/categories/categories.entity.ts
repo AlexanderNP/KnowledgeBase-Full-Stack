@@ -24,6 +24,10 @@ export class CategoryById extends Category {
     viewCount: number;
     likesCount: number;
     createdAt: Date;
+    author: {
+      id: string;
+      username: string;
+    };
     mediaFiles: { url: string }[];
     comments: { id: string }[];
   }[];
