@@ -27,6 +27,7 @@ export class CategoryById extends Category {
     author: {
       id: string;
       username: string;
+      avatar: string | null;
     };
     mediaFiles: { url: string }[];
     comments: { id: string }[];

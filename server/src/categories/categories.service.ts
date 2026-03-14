@@ -59,7 +59,13 @@ export class CategoriesService {
             id: true,
             createdAt: true,
             title: true,
-            author: true,
+            author: {
+              select: {
+                id: true,
+                username: true,
+                avatar: true,
+              },
+            },
             mediaFiles: {
               where: {
                 type: 'IMG',

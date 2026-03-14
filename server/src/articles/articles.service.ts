@@ -32,14 +32,14 @@ export class ArticlesService {
         comments: {
           select: {
             id: true,
-            author: { select: { id: true, username: true } },
+            author: { select: { id: true, username: true, avatar: true } },
             content: true,
             createdAt: true,
             updateAt: true,
           },
         },
         author: {
-          select: { id: true, username: true },
+          select: { id: true, username: true, avatar: true },
         },
       },
     });
@@ -56,15 +56,18 @@ export class ArticlesService {
         comments: {
           select: {
             id: true,
-            author: { select: { id: true, username: true } },
+            author: { select: { id: true, username: true, avatar: true } },
             content: true,
             createdAt: true,
             updateAt: true,
           },
         },
         author: {
-          select: { id: true, username: true },
+          select: { id: true, username: true, avatar: true },
         },
+      },
+      omit: {
+        authorId: true,
       },
     });
 
@@ -94,7 +97,7 @@ export class ArticlesService {
       },
       include: {
         author: {
-          select: { id: true, username: true },
+          select: { id: true, username: true, avatar: true },
         },
       },
     });
@@ -131,7 +134,7 @@ export class ArticlesService {
       data,
       include: {
         author: {
-          select: { id: true, username: true },
+          select: { id: true, username: true, avatar: true },
         },
       },
     });
@@ -185,7 +188,7 @@ export class ArticlesService {
       },
       include: {
         author: {
-          select: { id: true, username: true },
+          select: { id: true, username: true, avatar: true },
         },
       },
     });

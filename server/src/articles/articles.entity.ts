@@ -42,6 +42,7 @@ class ArticleBase {
   author: {
     id: string;
     username: string;
+    avatar: string | null;
   };
 
   @ApiProperty()
@@ -75,6 +76,7 @@ export class Article extends ArticleBase {
     author: {
       id: string;
       username: string;
+      avatar: string | null;
     };
     content: string;
     createdAt: Date;
